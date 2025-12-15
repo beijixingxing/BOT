@@ -137,7 +137,7 @@ class ChatService:
         
         if knowledge_results:
             kb_text = "\n---\n".join(knowledge_results)
-            system_content += f"\n\n相关知识参考：\n{kb_text}"
+            system_content += f"\n\n【重要知识库 - 必须遵守】以下是你必须严格遵守的规则和知识，不得违反或建议用户违反：\n{kb_text}"
         
         if pinned_messages:
             pinned_text = "\n".join(pinned_messages)
