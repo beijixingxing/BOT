@@ -570,6 +570,47 @@ async def get_llm_pool(
     return {"models": models, "enabled_count": len(pool.get_enabled_models())}
 
 
+@router.post("/llm-pool/test")
+async def test_llm_connection(
+    request: dict,
+    _: bool = Depends(verify_admin)
+):
+    """测试LLM API连接"""
+    import httpx
+    base_url = request.get("base_url", "").rstrip("/")
+    api_key = request.get("api_key", "")
+    model = request.get("model", "")
+    
+    if not base_url or not api_key:
+        raise HTTPException(status_code=400, detail="缺少API地址或密钥")
+    
+    try:
+        # 发送一个简单的测试请求
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            resp = await client.post(
+                f"{base_url}/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": model,
+                    "messages": [{"role": "user", "content": "Hi"}],
+                    "max_tokens": 5
+                }
+            )
+            
+            if resp.status_code == 200:
+                return {"success": True, "message": "连接成功"}
+            else:
+                error_text = resp.text[:200]
+                return {"success": False, "message": f"HTTP {resp.status_code}: {error_text}"}
+    except httpx.TimeoutException:
+        return {"success": False, "message": "连接超时"}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
+
+
 @router.post("/llm-pool")
 async def add_llm_to_pool(
     request: dict,

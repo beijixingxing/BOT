@@ -28,8 +28,10 @@ class ChatService:
         self._client = None
         self._llm_config = None
     
-    async def get_client_and_model(self) -> tuple[AsyncOpenAI, str]:
-        """获取LLM客户端和模型（支持模型池轮流）"""
+    async def get_client_and_model(self) -> tuple[AsyncOpenAI, str, str]:
+        """获取LLM客户端和模型（支持模型池轮流）
+        返回: (client, model_name, source_name)
+        """
         # 尝试使用模型池
         pool = await LLMPoolService.get_instance()
         if not pool.loaded:
@@ -37,7 +39,14 @@ class ChatService:
         
         if pool.is_pool_enabled():
             # 使用模型池轮流
-            return pool.get_client_and_model()
+            config = pool.get_next()
+            if config:
+                client = AsyncOpenAI(
+                    base_url=config["base_url"],
+                    api_key=config["api_key"]
+                )
+                source = f"{config.get('name', 'pool')}({config['base_url']})"
+                return client, config["model"], source
         
         # 回退到默认配置
         llm_config = await self.config_service.get_llm_config()
@@ -45,16 +54,16 @@ class ChatService:
             base_url=llm_config["base_url"],
             api_key=llm_config["api_key"]
         )
-        return client, llm_config["model"]
+        return client, llm_config["model"], "default"
     
     async def get_client(self) -> AsyncOpenAI:
-        """获取LLM客户端（兑容旧代码）"""
-        client, _ = await self.get_client_and_model()
+        """获取LLM客户端（兼容旧代码）"""
+        client, _, _ = await self.get_client_and_model()
         return client
     
     async def get_model(self) -> str:
-        """获取模型名称（兑容旧代码）"""
-        _, model = await self.get_client_and_model()
+        """获取模型名称（兼容旧代码）"""
+        _, model, _ = await self.get_client_and_model()
         return model
     
     async def get_chat_mode(self) -> str:
@@ -278,11 +287,10 @@ class ChatService:
         )
         
         try:
-            client = await self.get_client()
-            model = await self.get_model()
+            client, model, source = await self.get_client_and_model()
             full_response = ""
             
-            print(f"[ChatService] Using model: {model}, mode: {chat_mode}")
+            print(f"[ChatService] Using model: {model} from {source}, mode: {chat_mode}")
             print(f"[ChatService] Messages count: {len(messages)}")
             
             # 构建请求参数
