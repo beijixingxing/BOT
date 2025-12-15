@@ -227,6 +227,11 @@ class MessageHandler(commands.Cog):
                                 continue
                 
                 if full_response:
+                    # 清理模型可能输出的内部格式前缀
+                    import re
+                    full_response = re.sub(r'^\s*[\(（]\s*回复\s*[\[【].*?[\]】]\s*[\)）]\s*\n?', '', full_response)
+                    full_response = re.sub(r'^\s*\[回复.*?\]\s*\n?', '', full_response)
+                    
                     # 处理服务器表情
                     full_response = await self.process_emojis(full_response, message.guild)
                     
