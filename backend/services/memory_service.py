@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
-from database.models import Memory, User, Conversation
+from database.models import Memory, User, Conversation, SystemConfig
 from typing import Optional, List
 from openai import AsyncOpenAI
 from config import get_settings
@@ -11,10 +11,49 @@ settings = get_settings()
 class MemoryService:
     def __init__(self, db: AsyncSession):
         self.db = db
-        self.client = AsyncOpenAI(
-            base_url=settings.llm_base_url,
-            api_key=settings.llm_api_key
-        )
+        self._client = None
+    
+    async def get_client(self) -> AsyncOpenAI:
+        """获取LLM客户端，优先使用数据库配置"""
+        if self._client:
+            return self._client
+        
+        # 从数据库获取配置
+        base_url = settings.llm_base_url
+        api_key = settings.llm_api_key
+        
+        try:
+            result = await self.db.execute(
+                select(SystemConfig).where(SystemConfig.key == "llm_base_url")
+            )
+            config = result.scalar_one_or_none()
+            if config and config.value:
+                base_url = config.value
+            
+            result = await self.db.execute(
+                select(SystemConfig).where(SystemConfig.key == "llm_api_key")
+            )
+            config = result.scalar_one_or_none()
+            if config and config.value:
+                api_key = config.value
+        except:
+            pass
+        
+        self._client = AsyncOpenAI(base_url=base_url, api_key=api_key)
+        return self._client
+    
+    async def get_model(self) -> str:
+        """获取模型名称"""
+        try:
+            result = await self.db.execute(
+                select(SystemConfig).where(SystemConfig.key == "llm_model")
+            )
+            config = result.scalar_one_or_none()
+            if config and config.value:
+                return config.value
+        except:
+            pass
+        return settings.llm_model
     
     async def get_user_memory(self, user_id: int) -> Optional[Memory]:
         result = await self.db.execute(
@@ -68,8 +107,10 @@ class MemoryService:
 3. 喜好偏好"""
 
         try:
-            response = await self.client.chat.completions.create(
-                model=settings.llm_model,
+            client = await self.get_client()
+            model = await self.get_model()
+            response = await client.chat.completions.create(
+                model=model,
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=500
             )
