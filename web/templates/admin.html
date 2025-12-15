@@ -1676,9 +1676,16 @@
       async function saveLLMConfig() {
         const apiKey = document.getElementById("llmApiKey").value;
         const modelSelect = document.getElementById("llmModel").value;
-        const modelCustom = document.getElementById("llmModelCustom").value;
+        const modelCustom = document
+          .getElementById("llmModelCustom")
+          .value.trim();
         const model = modelCustom || modelSelect;
         const stream = document.getElementById("llmStream").checked;
+
+        if (!model) {
+          alert("请选择或输入模型名称");
+          return;
+        }
 
         const data = {
           base_url: document.getElementById("llmBaseUrl").value,
@@ -1688,8 +1695,14 @@
         if (apiKey && apiKey !== "********") {
           data.api_key = apiKey;
         }
-        await api("/api/admin/llm-config", "PUT", data);
-        alert("保存成功！");
+
+        try {
+          await api("/api/admin/llm-config", "PUT", data);
+          alert("保存成功！模型: " + model);
+          loadLLMConfig(); // 重新加载显示
+        } catch (e) {
+          alert("保存失败: " + e.message);
+        }
       }
 
       async function fetchModels() {
