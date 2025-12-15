@@ -222,21 +222,29 @@ class ChatService:
             client = await self.get_client()
             model = await self.get_model()
             full_response = ""
+            
+            print(f"[ChatService] Using model: {model}")
+            print(f"[ChatService] Messages count: {len(messages)}")
+            
             stream = await client.chat.completions.create(
                 model=model,
                 messages=messages,
-                max_tokens=1000,
+                max_tokens=4096,
                 stream=True
             )
             
             async for chunk in stream:
-                if chunk.choices[0].delta.content:
+                if chunk.choices and chunk.choices[0].delta.content:
                     content = chunk.choices[0].delta.content
                     full_response += content
                     yield content
             
-            await self.memory_service.save_conversation(user.id, channel_id, "user", message)
-            await self.memory_service.save_conversation(user.id, channel_id, "assistant", full_response)
+            if full_response:
+                await self.memory_service.save_conversation(user.id, channel_id, "user", message)
+                await self.memory_service.save_conversation(user.id, channel_id, "assistant", full_response)
             
         except Exception as e:
+            import traceback
+            print(f"[ChatService] Error: {str(e)}")
+            print(f"[ChatService] Traceback: {traceback.format_exc()}")
             yield f"[ERROR]{str(e)}"
