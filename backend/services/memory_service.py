@@ -140,3 +140,20 @@ class MemoryService:
             select(Memory).join(User).offset(skip).limit(limit)
         )
         return result.scalars().all()
+    
+    async def update_memory(self, user_id: int, summary: str):
+        memory = await self.get_user_memory(user_id)
+        if not memory:
+            return None
+        memory.summary = summary
+        await self.db.commit()
+        await self.db.refresh(memory)
+        return memory
+    
+    async def delete_memory(self, user_id: int) -> bool:
+        memory = await self.get_user_memory(user_id)
+        if not memory:
+            return False
+        await self.db.delete(memory)
+        await self.db.commit()
+        return True

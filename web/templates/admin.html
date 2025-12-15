@@ -372,6 +372,11 @@
                   >
                     更新时间
                   </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    操作
+                  </th>
                 </tr>
               </thead>
               <tbody
@@ -379,6 +384,39 @@
                 class="divide-y divide-gray-200"
               ></tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Memory Edit Modal -->
+        <div
+          id="memoryModal"
+          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+        >
+          <div
+            class="bg-white rounded-lg p-6 w-[600px] max-h-[80vh] overflow-y-auto"
+          >
+            <h2 class="text-xl font-bold mb-4">编辑用户记忆</h2>
+            <input type="hidden" id="memUserId" />
+            <textarea
+              id="memSummary"
+              placeholder="记忆摘要"
+              rows="10"
+              class="w-full px-4 py-2 border rounded-lg mb-4"
+            ></textarea>
+            <div class="flex justify-end space-x-3">
+              <button
+                onclick="hideMemoryModal()"
+                class="px-4 py-2 border rounded-lg hover:bg-gray-100"
+              >
+                取消
+              </button>
+              <button
+                onclick="saveMemory()"
+                class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              >
+                保存
+              </button>
+            </div>
           </div>
         </div>
 
@@ -992,7 +1030,7 @@
         const data = await api("/api/admin/memories");
         document.getElementById("memoriesTable").innerHTML =
           data.length === 0
-            ? '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">暂无记忆，选择用户后点击"汇总记忆"生成</td></tr>'
+            ? '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">暂无记忆，选择用户后点击"汇总记忆"生成</td></tr>'
             : data
                 .map(
                   (m) => `
@@ -1006,6 +1044,23 @@
                     <td class="px-6 py-4 text-sm text-gray-500">${new Date(
                       m.updated_at
                     ).toLocaleString()}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="editMemory(${m.user_id}, \`${(
+                    m.summary || ""
+                  )
+                    .replace(/`/g, "\\`")
+                    .replace(
+                      /\n/g,
+                      "\\n"
+                    )}\`)" class="text-indigo-600 hover:text-indigo-800 mr-2">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteMemory(${
+                          m.user_id
+                        })" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
             `
                 )
@@ -1034,6 +1089,35 @@
           );
           btn.disabled = false;
           btn.innerHTML = '<i class="fas fa-brain mr-2"></i>汇总记忆';
+        }
+      }
+
+      function editMemory(userId, summary) {
+        document.getElementById("memUserId").value = userId;
+        document.getElementById("memSummary").value = summary;
+        document.getElementById("memoryModal").classList.remove("hidden");
+      }
+
+      function hideMemoryModal() {
+        document.getElementById("memoryModal").classList.add("hidden");
+      }
+
+      async function saveMemory() {
+        const userId = document.getElementById("memUserId").value;
+        const summary = document.getElementById("memSummary").value;
+        try {
+          await api(`/api/admin/memories/${userId}`, "PUT", { summary });
+          hideMemoryModal();
+          loadMemories();
+        } catch (e) {
+          alert("保存失败: " + e.message);
+        }
+      }
+
+      async function deleteMemory(userId) {
+        if (confirm("确定删除此记忆？")) {
+          await api(`/api/admin/memories/${userId}`, "DELETE");
+          loadMemories();
         }
       }
 

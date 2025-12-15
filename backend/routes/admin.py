@@ -211,6 +211,33 @@ async def summarize_user_memory(
     return {"success": True, "summary": memory.summary}
 
 
+@router.put("/memories/{user_id}")
+async def update_memory(
+    user_id: int,
+    request: dict,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    memory_service = MemoryService(db)
+    memory = await memory_service.update_memory(user_id, request.get("summary", ""))
+    if not memory:
+        raise HTTPException(status_code=404, detail="Memory not found")
+    return {"success": True}
+
+
+@router.delete("/memories/{user_id}")
+async def delete_memory(
+    user_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    memory_service = MemoryService(db)
+    success = await memory_service.delete_memory(user_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Memory not found")
+    return {"success": True}
+
+
 # Bot Config Routes
 @router.get("/bot-config", response_model=List[BotConfigResponse])
 async def get_all_bot_configs(
