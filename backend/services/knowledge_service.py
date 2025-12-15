@@ -70,18 +70,23 @@ class KnowledgeService:
     
     async def search(self, query: str, limit: int = 3, max_content_length: int = 500, use_vector: bool = True) -> List[KnowledgeBase]:
         """搜索知识库，优先使用向量检索，回退到关键词匹配"""
+        print(f"[KnowledgeService] Searching for: {query[:50]}...")
         
         # 尝试向量检索
         if use_vector:
             try:
                 results = await self.vector_search(query, limit, max_content_length)
                 if results:
+                    print(f"[KnowledgeService] Vector search found {len(results)} results")
                     return results
+                print("[KnowledgeService] Vector search returned empty, trying keyword")
             except Exception as e:
                 print(f"[KnowledgeService] Vector search failed, fallback to keyword: {e}")
         
         # 回退到关键词匹配
-        return await self.keyword_search(query, limit, max_content_length)
+        results = await self.keyword_search(query, limit, max_content_length)
+        print(f"[KnowledgeService] Keyword search found {len(results)} results")
+        return results
     
     async def vector_search(self, query: str, limit: int = 3, max_content_length: int = 500) -> List[KnowledgeBase]:
         """向量语义检索"""
@@ -94,7 +99,10 @@ class KnowledgeService:
         all_kb = result.scalars().all()
         
         if not all_kb:
+            print("[KnowledgeService] No knowledge entries with embeddings found")
             return []
+        
+        print(f"[KnowledgeService] Found {len(all_kb)} entries with embeddings")
         
         # 获取查询向量
         embed_service = await self.get_embedding_service()
@@ -106,7 +114,7 @@ class KnowledgeService:
             query_embedding, 
             embeddings, 
             top_k=limit,
-            threshold=0.4  # 相似度阈值
+            threshold=0.3  # 降低相似度阈值以提高召回率
         )
         
         results = []
