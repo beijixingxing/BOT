@@ -7,6 +7,7 @@ from .knowledge_service import KnowledgeService
 from .blacklist_service import BlacklistService
 from .content_filter import ContentFilter
 from .config_service import ConfigService
+from .llm_pool_service import LLMPoolService
 from typing import List, Dict, AsyncGenerator, Optional
 
 settings = get_settings()
@@ -27,18 +28,34 @@ class ChatService:
         self._client = None
         self._llm_config = None
     
-    async def get_client(self) -> AsyncOpenAI:
-        """获取LLM客户端（使用数据库中的配置）"""
+    async def get_client_and_model(self) -> tuple[AsyncOpenAI, str]:
+        """获取LLM客户端和模型（支持模型池轮流）"""
+        # 尝试使用模型池
+        pool = await LLMPoolService.get_instance()
+        if not pool.loaded:
+            await pool.load_from_db(self.db)
+        
+        if pool.is_pool_enabled():
+            # 使用模型池轮流
+            return pool.get_client_and_model()
+        
+        # 回退到默认配置
         llm_config = await self.config_service.get_llm_config()
-        return AsyncOpenAI(
+        client = AsyncOpenAI(
             base_url=llm_config["base_url"],
             api_key=llm_config["api_key"]
         )
+        return client, llm_config["model"]
+    
+    async def get_client(self) -> AsyncOpenAI:
+        """获取LLM客户端（兑容旧代码）"""
+        client, _ = await self.get_client_and_model()
+        return client
     
     async def get_model(self) -> str:
-        """获取模型名称"""
-        llm_config = await self.config_service.get_llm_config()
-        return llm_config["model"]
+        """获取模型名称（兑容旧代码）"""
+        _, model = await self.get_client_and_model()
+        return model
     
     async def get_chat_mode(self) -> str:
         """获取对话模式"""
@@ -46,6 +63,11 @@ class ChatService:
         if config and hasattr(config, 'chat_mode') and config.chat_mode:
             return config.chat_mode
         return "chat"
+    
+    async def is_stream_enabled(self) -> bool:
+        """获取是否启用流式传输"""
+        llm_config = await self.config_service.get_llm_config()
+        return llm_config.get("stream", True)
     
     async def get_system_prompt(self) -> str:
         """获取Bot的系统提示词"""

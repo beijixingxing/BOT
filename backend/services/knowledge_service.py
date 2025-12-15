@@ -3,19 +3,38 @@ from sqlalchemy import select, or_
 from database.models import KnowledgeBase
 from typing import List, Optional
 import jieba
+import json
+from .embedding_service import EmbeddingService
 
 
 class KnowledgeService:
     def __init__(self, db: AsyncSession):
         self.db = db
+        self._embedding_service = None
     
-    async def create(self, title: str, content: str, keywords: str = None, category: str = None) -> KnowledgeBase:
+    @property
+    def embedding_service(self) -> EmbeddingService:
+        if self._embedding_service is None:
+            self._embedding_service = EmbeddingService()
+        return self._embedding_service
+    
+    async def create(self, title: str, content: str, keywords: str = None, category: str = None, auto_embed: bool = True) -> KnowledgeBase:
         kb = KnowledgeBase(
             title=title,
             content=content,
             keywords=keywords,
             category=category
         )
+        
+        # 自动生成向量
+        if auto_embed:
+            try:
+                embed_text = f"{title} {content[:500]}"  # 合并标题和内容前500字
+                embedding = await self.embedding_service.embed(embed_text)
+                kb.embedding = json.dumps(embedding)
+            except Exception as e:
+                print(f"[KnowledgeService] Embedding failed: {e}")
+        
         self.db.add(kb)
         await self.db.commit()
         await self.db.refresh(kb)
@@ -49,7 +68,59 @@ class KnowledgeService:
         await self.db.commit()
         return True
     
-    async def search(self, query: str, limit: int = 5) -> List[KnowledgeBase]:
+    async def search(self, query: str, limit: int = 3, max_content_length: int = 500, use_vector: bool = True) -> List[KnowledgeBase]:
+        """搜索知识库，优先使用向量检索，回退到关键词匹配"""
+        
+        # 尝试向量检索
+        if use_vector:
+            try:
+                results = await self.vector_search(query, limit, max_content_length)
+                if results:
+                    return results
+            except Exception as e:
+                print(f"[KnowledgeService] Vector search failed, fallback to keyword: {e}")
+        
+        # 回退到关键词匹配
+        return await self.keyword_search(query, limit, max_content_length)
+    
+    async def vector_search(self, query: str, limit: int = 3, max_content_length: int = 500) -> List[KnowledgeBase]:
+        """向量语义检索"""
+        # 获取所有有向量的知识库条目
+        result = await self.db.execute(
+            select(KnowledgeBase)
+            .where(KnowledgeBase.is_active == True)
+            .where(KnowledgeBase.embedding.isnot(None))
+        )
+        all_kb = result.scalars().all()
+        
+        if not all_kb:
+            return []
+        
+        # 获取查询向量
+        query_embedding = await self.embedding_service.embed(query)
+        
+        # 计算相似度
+        embeddings = [json.loads(kb.embedding) for kb in all_kb]
+        similar_indices = EmbeddingService.find_most_similar(
+            query_embedding, 
+            embeddings, 
+            top_k=limit,
+            threshold=0.4  # 相似度阈值
+        )
+        
+        results = []
+        for idx, score in similar_indices:
+            kb = all_kb[idx]
+            # 截断过长内容
+            if len(kb.content) > max_content_length:
+                kb.content = kb.content[:max_content_length] + "...(已截断)"
+            results.append(kb)
+            print(f"[KnowledgeService] Vector match: {kb.title} (score: {score:.3f})")
+        
+        return results
+    
+    async def keyword_search(self, query: str, limit: int = 3, max_content_length: int = 500) -> List[KnowledgeBase]:
+        """关键词匹配检索"""
         keywords = list(jieba.cut(query))
         keywords = [k.strip() for k in keywords if len(k.strip()) > 1]
         
@@ -57,10 +128,9 @@ class KnowledgeService:
             return []
         
         conditions = []
-        for kw in keywords:
+        for kw in keywords[:5]:
             conditions.append(KnowledgeBase.keywords.contains(kw))
             conditions.append(KnowledgeBase.title.contains(kw))
-            conditions.append(KnowledgeBase.content.contains(kw))
         
         result = await self.db.execute(
             select(KnowledgeBase)
@@ -68,7 +138,33 @@ class KnowledgeService:
             .where(or_(*conditions))
             .limit(limit)
         )
-        return result.scalars().all()
+        results = result.scalars().all()
+        
+        for kb in results:
+            if len(kb.content) > max_content_length:
+                kb.content = kb.content[:max_content_length] + "...(已截断)"
+        
+        return results
+    
+    async def rebuild_embeddings(self) -> int:
+        """重建所有知识库条目的向量"""
+        result = await self.db.execute(
+            select(KnowledgeBase).where(KnowledgeBase.is_active == True)
+        )
+        all_kb = result.scalars().all()
+        
+        count = 0
+        for kb in all_kb:
+            try:
+                embed_text = f"{kb.title} {kb.content[:500]}"
+                embedding = await self.embedding_service.embed(embed_text)
+                kb.embedding = json.dumps(embedding)
+                count += 1
+            except Exception as e:
+                print(f"[KnowledgeService] Embed failed for {kb.id}: {e}")
+        
+        await self.db.commit()
+        return count
     
     async def get_all(self, skip: int = 0, limit: int = 100, active_only: bool = False):
         query = select(KnowledgeBase)

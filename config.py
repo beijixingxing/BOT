@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_model: str = "gpt-4o-mini"
     
+    # Embedding (向量化模型，留空则使用LLM的配置)
+    embedding_base_url: str = ""
+    embedding_api_key: str = ""
+    embedding_model: str = "BAAI/bge-m3"
+    
     # Context (Bot独立配置，可在Web后台修改)
     context_limit: int = 10
     

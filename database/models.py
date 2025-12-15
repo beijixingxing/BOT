@@ -58,6 +58,7 @@ class KnowledgeBase(Base):
     content = Column(Text, nullable=False)
     keywords = Column(String(500))
     category = Column(String(100))
+    embedding = Column(Text, nullable=True)  # JSON格式存储向量
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

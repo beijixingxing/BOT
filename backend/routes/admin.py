@@ -12,7 +12,7 @@ from backend.schemas import (
 )
 from backend.services import (
     BlacklistService, ChannelService, ContentFilter,
-    UserService, MemoryService, ConfigService
+    UserService, MemoryService, ConfigService, KnowledgeService, LLMPoolService
 )
 from config import get_settings
 from typing import List
@@ -429,3 +429,160 @@ async def get_llm_models(
             return {"models": [m.get("id") for m in models if m.get("id")]}
     except httpx.RequestError as e:
         raise HTTPException(status_code=500, detail=f"请求失败: {str(e)}")
+
+
+# Knowledge Base Routes
+@router.post("/knowledge/rebuild-embeddings")
+async def rebuild_knowledge_embeddings(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """重建所有知识库条目的向量"""
+    service = KnowledgeService(db)
+    count = await service.rebuild_embeddings()
+    return {"success": True, "rebuilt": count}
+
+
+@router.get("/knowledge")
+async def get_knowledge_list(
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取知识库列表"""
+    service = KnowledgeService(db)
+    items = await service.get_all(skip, limit)
+    return [
+        {
+            "id": kb.id,
+            "title": kb.title,
+            "content": kb.content[:200] + "..." if len(kb.content) > 200 else kb.content,
+            "keywords": kb.keywords,
+            "category": kb.category,
+            "has_embedding": kb.embedding is not None,
+            "is_active": kb.is_active,
+            "created_at": kb.created_at.isoformat() if kb.created_at else None
+        }
+        for kb in items
+    ]
+
+
+@router.post("/knowledge")
+async def create_knowledge(
+    request: dict,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """创建知识库条目"""
+    service = KnowledgeService(db)
+    kb = await service.create(
+        title=request.get("title", ""),
+        content=request.get("content", ""),
+        keywords=request.get("keywords"),
+        category=request.get("category"),
+        auto_embed=request.get("auto_embed", True)
+    )
+    return {"success": True, "id": kb.id}
+
+
+@router.delete("/knowledge/{kb_id}")
+async def delete_knowledge(
+    kb_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """删除知识库条目"""
+    service = KnowledgeService(db)
+    success = await service.delete(kb_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Knowledge not found")
+    return {"success": True}
+
+
+# LLM Pool Routes (多模型轮流负载均衡)
+@router.get("/llm-pool")
+async def get_llm_pool(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取模型池列表"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    # 返回时隐藏API Key的中间部分
+    models = []
+    for i, m in enumerate(pool.get_pool()):
+        key = m.get("api_key", "")
+        masked_key = key[:8] + "****" + key[-4:] if len(key) > 12 else "****"
+        models.append({
+            "index": i,
+            "name": m.get("name", ""),
+            "base_url": m.get("base_url", ""),
+            "api_key": masked_key,
+            "model": m.get("model", ""),
+            "enabled": m.get("enabled", True)
+        })
+    return {"models": models, "enabled_count": len(pool.get_enabled_models())}
+
+
+@router.post("/llm-pool")
+async def add_llm_to_pool(
+    request: dict,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """添加模型到池"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    pool.add_model(
+        base_url=request.get("base_url", ""),
+        api_key=request.get("api_key", ""),
+        model=request.get("model", ""),
+        name=request.get("name")
+    )
+    await pool.save_to_db(db)
+    return {"success": True, "count": len(pool.get_pool())}
+
+
+@router.delete("/llm-pool/{index}")
+async def remove_llm_from_pool(
+    index: int,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """从池中移除模型"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    success = pool.remove_model(index)
+    if not success:
+        raise HTTPException(status_code=404, detail="Model not found")
+    
+    await pool.save_to_db(db)
+    return {"success": True}
+
+
+@router.put("/llm-pool/{index}/toggle")
+async def toggle_llm_in_pool(
+    index: int,
+    request: dict,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """启用/禁用池中的模型"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    enabled = request.get("enabled", True)
+    success = pool.toggle_model(index, enabled)
+    if not success:
+        raise HTTPException(status_code=404, detail="Model not found")
+    
+    await pool.save_to_db(db)
+    return {"success": True}
