@@ -29,32 +29,48 @@ class ChatService:
         self._llm_config = None
     
     async def get_client_and_model(self) -> tuple[AsyncOpenAI, str, str]:
-        """获取LLM客户端和模型（支持模型池轮流）
+        """获取LLM客户端和模型（支持模型池轮流，主API也参与）
         返回: (client, model_name, source_name)
         """
-        # 尝试使用模型池
         pool = await LLMPoolService.get_instance()
         if not pool.loaded:
             await pool.load_from_db(self.db)
         
-        if pool.is_pool_enabled():
-            # 使用模型池轮流
-            config = pool.get_next()
-            if config:
-                client = AsyncOpenAI(
-                    base_url=config["base_url"],
-                    api_key=config["api_key"]
-                )
-                source = f"{config.get('name', 'pool')}({config['base_url']})"
-                return client, config["model"], source
-        
-        # 回退到默认配置
+        # 获取主API配置
         llm_config = await self.config_service.get_llm_config()
+        
+        # 构建完整的模型列表（模型池 + 主API）
+        all_models = []
+        
+        # 添加模型池中启用的模型
+        for m in pool.get_enabled_models():
+            all_models.append({
+                "base_url": m["base_url"],
+                "api_key": m["api_key"],
+                "model": m["model"],
+                "name": m.get("name", "pool")
+            })
+        
+        # 添加主API（如果配置了的话）
+        if llm_config.get("base_url") and llm_config.get("api_key"):
+            all_models.append({
+                "base_url": llm_config["base_url"],
+                "api_key": llm_config["api_key"],
+                "model": llm_config["model"],
+                "name": "主API"
+            })
+        
+        if not all_models:
+            raise ValueError("没有可用的模型配置")
+        
+        # 轮流选择
+        config = pool.get_next_from_list(all_models)
         client = AsyncOpenAI(
-            base_url=llm_config["base_url"],
-            api_key=llm_config["api_key"]
+            base_url=config["base_url"],
+            api_key=config["api_key"]
         )
-        return client, llm_config["model"], "default"
+        source = f"{config.get('name', 'unknown')}({config['base_url']})"
+        return client, config["model"], source
     
     async def get_client(self) -> AsyncOpenAI:
         """获取LLM客户端（兼容旧代码）"""

@@ -110,6 +110,17 @@ class LLMPoolService:
         
         return model
     
+    def get_next_from_list(self, models: List[Dict]) -> Dict:
+        """从指定列表中轮流选择下一个模型"""
+        if not models:
+            raise ValueError("模型列表为空")
+        
+        self._current_index = self._current_index % len(models)
+        model = models[self._current_index]
+        self._current_index = (self._current_index + 1) % len(models)
+        
+        return model
+    
     def get_client_and_model(self, config: Dict = None) -> tuple[AsyncOpenAI, str]:
         """获取客户端和模型名，如果config为空则轮流选择"""
         if config is None:
