@@ -160,6 +160,35 @@ async def clear_all_sensitive_words(
     return {"success": True}
 
 
+@router.post("/sensitive-words/batch")
+async def batch_add_sensitive_words(
+    request: dict,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """批量添加敏感词"""
+    from database.models import SensitiveWord
+    from sqlalchemy import select
+    
+    words = request.get("words", [])
+    category = request.get("category", "导入")
+    
+    # 获取已存在的词
+    result = await db.execute(select(SensitiveWord.word))
+    existing = set(w.lower() for w in result.scalars().all())
+    
+    # 批量添加新词
+    added = 0
+    for word in words:
+        if word.lower() not in existing:
+            db.add(SensitiveWord(word=word, category=category))
+            existing.add(word.lower())
+            added += 1
+    
+    await db.commit()
+    return {"success": True, "added": added, "total": len(words)}
+
+
 @router.delete("/sensitive-words/{word_id}")
 async def remove_sensitive_word(
     word_id: int,

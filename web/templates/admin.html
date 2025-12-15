@@ -1422,28 +1422,20 @@
         importBtn.disabled = true;
         importBtn.innerHTML =
           '<i class="fas fa-spinner fa-spin mr-2"></i>导入中...';
+        preview.innerHTML = `正在批量导入 <strong>${words.length}</strong> 个敏感词...`;
 
-        let success = 0;
-        for (let i = 0; i < words.length; i++) {
-          try {
-            await api("/api/admin/sensitive-words", "POST", {
-              word: words[i],
-              category: category || "导入",
-            });
-            success++;
-          } catch (e) {}
-
-          // 每10个更新一次进度
-          if (i % 10 === 0 || i === words.length - 1) {
-            preview.innerHTML = `正在导入... <strong>${i + 1}/${
-              words.length
-            }</strong> (成功: ${success})`;
-          }
+        try {
+          const result = await api("/api/admin/sensitive-words/batch", "POST", {
+            words: words,
+            category: category || "导入",
+          });
+          alert(`导入完成！新增 ${result.added}/${result.total} 个敏感词`);
+        } catch (e) {
+          alert("导入失败: " + e.message);
         }
 
         importBtn.disabled = false;
         importBtn.innerHTML = "导入";
-        alert(`导入完成！成功 ${success}/${words.length} 个敏感词`);
         hideSensitiveImportModal();
         loadSensitiveWords();
       }
