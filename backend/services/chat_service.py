@@ -90,6 +90,9 @@ class ChatService:
         # 答疑模式提示
         if chat_mode == "qa":
             system_content += "\n\n【答疑模式】请只关注当前问题，不要参考之前的对话历史。"
+        else:
+            # 聊天模式：多用户提示
+            system_content += "\n\n【多用户聊天】当前频道有多人对话，每条消息前有[用户名]标记。请注意区分不同用户，针对@你或回复你的用户进行回复，不要混淆不同用户的对话。"
         
         if user_memory:
             system_content += f"\n\n关于当前用户的记忆：\n{user_memory}"
