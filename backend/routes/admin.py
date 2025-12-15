@@ -651,6 +651,53 @@ async def remove_llm_from_pool(
     return {"success": True}
 
 
+@router.post("/llm-pool/{index}/test")
+async def test_existing_model(
+    index: int,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """测试已添加模型的连接"""
+    import httpx
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    models = pool.get_pool()
+    if index < 0 or index >= len(models):
+        raise HTTPException(status_code=404, detail="Model not found")
+    
+    m = models[index]
+    base_url = m.get("base_url", "").rstrip("/")
+    api_key = m.get("api_key", "")
+    model = m.get("model", "")
+    
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            resp = await client.post(
+                f"{base_url}/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": model,
+                    "messages": [{"role": "user", "content": "Hi"}],
+                    "max_tokens": 5
+                }
+            )
+            
+            if resp.status_code == 200:
+                return {"success": True, "message": "连接成功"}
+            else:
+                error_text = resp.text[:200]
+                return {"success": False, "message": f"HTTP {resp.status_code}: {error_text}"}
+    except httpx.TimeoutException:
+        return {"success": False, "message": "连接超时"}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
+
+
 @router.put("/llm-pool/{index}/toggle")
 async def toggle_llm_in_pool(
     index: int,

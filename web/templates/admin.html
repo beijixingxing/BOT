@@ -2173,10 +2173,15 @@
                     ${m.enabled ? "启用" : "禁用"}
                   </button>
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 space-x-2">
+                  <button onclick="testExistingModel(${
+                    m.index
+                  })" class="text-green-600 hover:text-green-800" title="测试连接">
+                    <i class="fas fa-plug"></i>
+                  </button>
                   <button onclick="removeFromPool(${
                     m.index
-                  })" class="text-red-600 hover:text-red-800">
+                  })" class="text-red-600 hover:text-red-800" title="删除">
                     <i class="fas fa-trash"></i>
                   </button>
                 </td>
@@ -2240,6 +2245,19 @@
           loadLLMPool();
         } catch (e) {
           alert("操作失败：" + e.message);
+        }
+      }
+
+      async function testExistingModel(index) {
+        try {
+          const result = await api(`/api/admin/llm-pool/${index}/test`, "POST");
+          if (result.success) {
+            alert("✓ 连接成功");
+          } else {
+            alert("✗ " + result.message);
+          }
+        } catch (e) {
+          alert("✗ 测试失败：" + e.message);
         }
       }
 
