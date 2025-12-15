@@ -1075,7 +1075,9 @@
       }
 
       async function addChannel() {
+        const botId = document.getElementById("chBotId").value || "yu";
         await api("/api/admin/channels", "POST", {
+          bot_id: botId,
           channel_id: document.getElementById("chChannelId").value,
           guild_id: document.getElementById("chGuildId").value,
           channel_name: document.getElementById("chName").value,

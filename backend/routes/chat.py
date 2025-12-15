@@ -20,7 +20,8 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
         context_messages=[m.model_dump() for m in request.context_messages],
         pinned_messages=request.pinned_messages,
         reply_content=request.reply_content,
-        image_urls=request.image_urls
+        image_urls=request.image_urls,
+        guild_emojis=request.guild_emojis
     )
     return ChatResponse(**result)
 
@@ -38,7 +39,8 @@ async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
             context_messages=[m.model_dump() for m in request.context_messages],
             pinned_messages=request.pinned_messages,
             reply_content=request.reply_content,
-            image_urls=request.image_urls
+            image_urls=request.image_urls,
+            guild_emojis=request.guild_emojis
         ):
             yield f"data: {json.dumps({'content': chunk})}\n\n"
     

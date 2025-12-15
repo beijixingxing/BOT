@@ -134,6 +134,13 @@ class MessageHandler(commands.Cog):
         except:
             return []
     
+    def get_guild_emojis(self, guild: discord.Guild) -> str:
+        """获取服务器表情列表"""
+        if not guild or not guild.emojis:
+            return ""
+        emoji_list = [f":{e.name}:" for e in guild.emojis[:50]]
+        return "可用表情: " + " ".join(emoji_list)
+    
     async def get_reply_content(self, message: discord.Message) -> Optional[str]:
         if message.reference and message.reference.resolved:
             ref = message.reference.resolved
@@ -260,6 +267,7 @@ class MessageHandler(commands.Cog):
         pinned_messages = await self.get_pinned_messages(message.channel)
         reply_content = await self.get_reply_content(message)
         image_urls = await self.get_image_urls(message)
+        guild_emojis = self.get_guild_emojis(message.guild)
         
         request_data = {
             "bot_id": settings.bot_id,
@@ -270,7 +278,8 @@ class MessageHandler(commands.Cog):
             "context_messages": context_messages,
             "pinned_messages": pinned_messages,
             "reply_content": reply_content,
-            "image_urls": image_urls
+            "image_urls": image_urls,
+            "guild_emojis": guild_emojis
         }
         
         async with message.channel.typing():

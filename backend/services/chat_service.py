@@ -72,7 +72,8 @@ class ChatService:
         reply_content: str,
         user_memory: str,
         knowledge_results: List[str],
-        image_urls: List[str]
+        image_urls: List[str],
+        guild_emojis: str = None
     ) -> List[Dict]:
         messages = []
         
@@ -88,6 +89,9 @@ class ChatService:
         if pinned_messages:
             pinned_text = "\n".join(pinned_messages)
             system_content += f"\n\n频道置顶/标注消息（可用作答疑参考）：\n{pinned_text}"
+        
+        if guild_emojis:
+            system_content += f"\n\n{guild_emojis}\n你可以在回复中使用这些表情，格式如 :表情名:"
         
         messages.append({"role": "system", "content": system_content})
         
@@ -119,7 +123,8 @@ class ChatService:
         context_messages: List[Dict] = None,
         pinned_messages: List[str] = None,
         reply_content: str = None,
-        image_urls: List[str] = None
+        image_urls: List[str] = None,
+        guild_emojis: str = None
     ) -> Dict:
         allowed, block_reason = await self.check_user_allowed(discord_id)
         if not allowed:
@@ -152,7 +157,8 @@ class ChatService:
             reply_content=reply_content,
             user_memory=user_memory,
             knowledge_results=knowledge_texts,
-            image_urls=image_urls or []
+            image_urls=image_urls or [],
+            guild_emojis=guild_emojis
         )
         
         try:
@@ -161,7 +167,7 @@ class ChatService:
             response = await client.chat.completions.create(
                 model=model,
                 messages=messages,
-                max_tokens=1000
+                max_tokens=4096
             )
             
             assistant_message = response.choices[0].message.content
@@ -188,7 +194,8 @@ class ChatService:
         context_messages: List[Dict] = None,
         pinned_messages: List[str] = None,
         reply_content: str = None,
-        image_urls: List[str] = None
+        image_urls: List[str] = None,
+        guild_emojis: str = None
     ) -> AsyncGenerator[str, None]:
         allowed, block_reason = await self.check_user_allowed(discord_id)
         if not allowed:
@@ -215,7 +222,8 @@ class ChatService:
             reply_content=reply_content,
             user_memory=user_memory,
             knowledge_results=knowledge_texts,
-            image_urls=image_urls or []
+            image_urls=image_urls or [],
+            guild_emojis=guild_emojis
         )
         
         try:

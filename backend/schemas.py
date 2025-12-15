@@ -150,6 +150,7 @@ class ChatRequest(BaseModel):
     pinned_messages: List[str] = []
     reply_content: Optional[str] = None
     image_urls: List[str] = []
+    guild_emojis: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
