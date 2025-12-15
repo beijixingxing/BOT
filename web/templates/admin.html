@@ -1076,8 +1076,11 @@
         }
       }
 
+      let knowledgeData = [];
+
       async function loadKnowledge() {
         const data = await api("/api/knowledge/");
+        knowledgeData = data;
         document.getElementById("knowledgeTable").innerHTML = data
           .map(
             (kb) => `
@@ -1099,6 +1102,11 @@
                         </span>
                     </td>
                     <td class="px-6 py-4">
+                        <button onclick="editKnowledge(${
+                          kb.id
+                        })" class="text-indigo-600 hover:text-indigo-800 mr-2">
+                            <i class="fas fa-edit"></i>
+                        </button>
                         <button onclick="deleteKnowledge(${
                           kb.id
                         })" class="text-red-600 hover:text-red-800">
@@ -1453,11 +1461,30 @@
         loadKnowledge();
       }
 
+      let editingKbId = null;
+
       function showKnowledgeModal() {
+        editingKbId = null;
+        document.getElementById("kbTitle").value = "";
+        document.getElementById("kbContent").value = "";
+        document.getElementById("kbKeywords").value = "";
+        document.getElementById("kbCategory").value = "";
         document.getElementById("knowledgeModal").classList.remove("hidden");
       }
       function hideKnowledgeModal() {
         document.getElementById("knowledgeModal").classList.add("hidden");
+      }
+
+      function editKnowledge(id) {
+        const kb = knowledgeData.find((k) => k.id === id);
+        if (kb) {
+          editingKbId = id;
+          document.getElementById("kbTitle").value = kb.title || "";
+          document.getElementById("kbContent").value = kb.content || "";
+          document.getElementById("kbKeywords").value = kb.keywords || "";
+          document.getElementById("kbCategory").value = kb.category || "";
+          document.getElementById("knowledgeModal").classList.remove("hidden");
+        }
       }
       function showBlacklistModal() {
         document.getElementById("blacklistModal").classList.remove("hidden");
@@ -1485,12 +1512,18 @@
 
       // CRUD operations
       async function addKnowledge() {
-        await api("/api/knowledge/", "POST", {
+        const data = {
           title: document.getElementById("kbTitle").value,
           content: document.getElementById("kbContent").value,
           keywords: document.getElementById("kbKeywords").value,
           category: document.getElementById("kbCategory").value,
-        });
+        };
+
+        if (editingKbId) {
+          await api(`/api/knowledge/${editingKbId}`, "PUT", data);
+        } else {
+          await api("/api/knowledge/", "POST", data);
+        }
         hideKnowledgeModal();
         loadKnowledge();
       }
