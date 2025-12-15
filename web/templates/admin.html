@@ -1160,6 +1160,29 @@
           document.getElementById("llmModelCustom").value = config.model || "";
           document.getElementById("llmStream").checked =
             config.stream !== false;
+
+          // 保存当前模型到手动输入框，并尝试添加到下拉列表
+          const currentModel = config.model || "";
+          document.getElementById("llmModelCustom").value = currentModel;
+          if (currentModel) {
+            const select = document.getElementById("llmModel");
+            // 检查是否已存在
+            let exists = false;
+            for (let opt of select.options) {
+              if (opt.value === currentModel) {
+                exists = true;
+                opt.selected = true;
+                break;
+              }
+            }
+            if (!exists) {
+              const option = document.createElement("option");
+              option.value = currentModel;
+              option.textContent = currentModel + " (当前)";
+              option.selected = true;
+              select.appendChild(option);
+            }
+          }
         } catch (e) {
           console.error(e);
         }

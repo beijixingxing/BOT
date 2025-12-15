@@ -153,8 +153,12 @@ class MessageHandler(commands.Cog):
         return content
     
     async def send_streaming_response(self, message: discord.Message, request_data: dict):
+        import time
+        start_time = time.time()
         reply_msg = await message.reply("思考中...", mention_author=False)
         full_response = ""
+        last_update = 0
+        update_interval = 0.8  # 每0.8秒更新一次，减少卡顿
         
         try:
             async with self.bot.http_client.stream(
@@ -183,26 +187,59 @@ class MessageHandler(commands.Cog):
                                 
                                 full_response += content
                                 
-                                if len(full_response) % 50 == 0 or len(full_response) < 100:
+                                # 按时间间隔更新，减少API调用
+                                current_time = time.time()
+                                if current_time - last_update >= update_interval:
                                     display = full_response[:1900] + "..." if len(full_response) > 1900 else full_response
-                                    await reply_msg.edit(content=display or "...")
+                                    try:
+                                        await reply_msg.edit(content=display or "思考中...")
+                                    except:
+                                        pass
+                                    last_update = current_time
                             except json.JSONDecodeError:
                                 continue
                 
                 if full_response:
-                    if len(full_response) > 2000:
-                        chunks = [full_response[i:i+1990] for i in range(0, len(full_response), 1990)]
+                    # 处理服务器表情
+                    full_response = await self.process_emojis(full_response, message.guild)
+                    
+                    # 计算统计信息
+                    elapsed = time.time() - start_time
+                    stats = f"\n`Time: {elapsed:.1f}s`"
+                    
+                    if len(full_response) > 2000 - len(stats):
+                        chunks = [full_response[i:i+1950] for i in range(0, len(full_response), 1950)]
                         await reply_msg.edit(content=chunks[0])
-                        for chunk in chunks[1:]:
+                        for i, chunk in enumerate(chunks[1:]):
+                            if i == len(chunks) - 2:  # 最后一条加统计
+                                chunk += stats
                             await message.channel.send(chunk)
                     else:
-                        await reply_msg.edit(content=full_response)
+                        await reply_msg.edit(content=full_response + stats)
                 else:
                     await reply_msg.edit(content="抱歉，我没有生成回复。")
                     
         except Exception as e:
             print(f"Streaming error: {e}")
             await reply_msg.edit(content=f"❌ 发生错误，请稍后再试")
+    
+    async def process_emojis(self, content: str, guild: discord.Guild) -> str:
+        """将文本中的表情标记替换为服务器表情"""
+        import re
+        
+        # 匹配 :emoji_name: 格式
+        emoji_pattern = re.compile(r':([a-zA-Z0-9_]+):')
+        
+        def replace_emoji(match):
+            emoji_name = match.group(1)
+            # 先在当前服务器找
+            for emoji in guild.emojis:
+                if emoji.name.lower() == emoji_name.lower():
+                    return str(emoji)
+            # 找不到返回原文
+            return match.group(0)
+        
+        return emoji_pattern.sub(replace_emoji, content)
     
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
