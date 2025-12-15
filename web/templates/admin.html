@@ -1056,42 +1056,32 @@
 
         // 加载记忆列表
         const data = await api("/api/admin/memories");
+        memoriesData = data;
         document.getElementById("memoriesTable").innerHTML =
           data.length === 0
             ? '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">暂无记忆，选择用户后点击"汇总记忆"生成</td></tr>'
             : data
-                .map(
-                  (m) => `
+                .map((m) => {
+                  const safeId = m.user_id;
+                  return `
                 <tr>
-                    <td class="px-6 py-4 text-sm text-gray-900">${
-                      m.user_id
-                    }</td>
-                    <td class="px-6 py-4 text-sm text-gray-500 max-w-md truncate">${
-                      m.summary || "-"
-                    }</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">${safeId}</td>
+                    <td class="px-6 py-4 text-sm text-gray-500 max-w-md truncate" title="${(
+                      m.summary || ""
+                    ).replace(/"/g, "&quot;")}">${m.summary || "-"}</td>
                     <td class="px-6 py-4 text-sm text-gray-500">${new Date(
                       m.updated_at
                     ).toLocaleString()}</td>
                     <td class="px-6 py-4">
-                        <button onclick="editMemory(${m.user_id}, \`${(
-                    m.summary || ""
-                  )
-                    .replace(/`/g, "\\`")
-                    .replace(
-                      /\n/g,
-                      "\\n"
-                    )}\`)" class="text-indigo-600 hover:text-indigo-800 mr-2">
+                        <button onclick="openMemoryEdit(${safeId})" class="text-indigo-600 hover:text-indigo-800 mr-2">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick="deleteMemory(${
-                          m.user_id
-                        })" class="text-red-600 hover:text-red-800">
+                        <button onclick="deleteMemory(${safeId})" class="text-red-600 hover:text-red-800">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
-                </tr>
-            `
-                )
+                </tr>`;
+                })
                 .join("");
       }
 
@@ -1117,6 +1107,17 @@
           );
           btn.disabled = false;
           btn.innerHTML = '<i class="fas fa-brain mr-2"></i>汇总记忆';
+        }
+      }
+
+      let memoriesData = [];
+
+      function openMemoryEdit(userId) {
+        const mem = memoriesData.find((m) => m.user_id === userId);
+        if (mem) {
+          document.getElementById("memUserId").value = userId;
+          document.getElementById("memSummary").value = mem.summary || "";
+          document.getElementById("memoryModal").classList.remove("hidden");
         }
       }
 
