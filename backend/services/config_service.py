@@ -103,7 +103,8 @@ class ConfigService:
         bot_name: str = None,
         system_prompt: str = None,
         context_limit: int = None,
-        is_active: bool = None
+        is_active: bool = None,
+        admin_ids: str = None
     ) -> BotConfig:
         config = await self.get_or_create_bot_config(bot_id)
         
@@ -115,6 +116,8 @@ class ConfigService:
             config.context_limit = context_limit
         if is_active is not None:
             config.is_active = is_active
+        if admin_ids is not None:
+            config.admin_ids = admin_ids
         
         await self.db.commit()
         await self.db.refresh(config)

@@ -321,13 +321,42 @@ DEVELOPER_ID = 1373778569154658426
 class AdminCommands(commands.Cog):
     def __init__(self, bot: CatieBot):
         self.bot = bot
+        self._admin_ids_cache = set()
+        self._cache_time = 0
+    
+    async def get_admin_ids(self) -> set:
+        """从后台获取管理员ID列表（带缓存）"""
+        import time
+        # 缓存5分钟
+        if time.time() - self._cache_time < 300 and self._admin_ids_cache:
+            return self._admin_ids_cache
+        
+        try:
+            resp = await self.bot.http_client.get(
+                f"{settings.backend_url}/api/admin/bot-config",
+                params={"bot_id": settings.bot_id},
+                headers={"X-Admin-Secret": settings.admin_password}
+            )
+            if resp.status_code == 200:
+                config = resp.json()
+                admin_str = config.get("admin_ids", "")
+                if admin_str:
+                    self._admin_ids_cache = set(int(x.strip()) for x in admin_str.split(",") if x.strip().isdigit())
+                self._cache_time = time.time()
+        except:
+            pass
+        return self._admin_ids_cache
     
     async def is_admin(self, interaction: discord.Interaction) -> bool:
+        # 开发者永远是管理员
         if interaction.user.id == DEVELOPER_ID:
             return True
-        if interaction.user.guild_permissions.administrator:
+        # 检查后台配置的管理员
+        admin_ids = await self.get_admin_ids()
+        if interaction.user.id in admin_ids:
             return True
-        if interaction.user.guild_permissions.manage_guild:
+        # Discord服务器管理员
+        if interaction.user.guild_permissions.administrator:
             return True
         return False
     

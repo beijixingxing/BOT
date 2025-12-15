@@ -260,7 +260,8 @@ async def update_bot_config(
         bot_name=request.bot_name,
         system_prompt=request.system_prompt,
         context_limit=request.context_limit,
-        is_active=request.is_active
+        is_active=request.is_active,
+        admin_ids=request.admin_ids
     )
 
 
