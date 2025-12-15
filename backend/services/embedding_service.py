@@ -1,23 +1,47 @@
 from openai import AsyncOpenAI
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from database.models import SystemConfig
 from typing import List, Optional
 import numpy as np
-from config import get_settings
-
-settings = get_settings()
 
 
 class EmbeddingService:
     """向量化服务，使用硅基流动或其他OpenAI兼容的embedding API"""
     
     def __init__(self, base_url: str = None, api_key: str = None, model: str = None):
-        self.base_url = base_url or settings.embedding_base_url or settings.llm_base_url
-        self.api_key = api_key or settings.embedding_api_key or settings.llm_api_key
-        self.model = model or settings.embedding_model or "BAAI/bge-m3"
+        self.base_url = base_url
+        self.api_key = api_key
+        self.model = model or "BAAI/bge-m3"
         self._client = None
+    
+    @classmethod
+    async def from_db(cls, db: AsyncSession) -> "EmbeddingService":
+        """从数据库加载配置创建实例"""
+        async def get_config(key: str) -> Optional[str]:
+            result = await db.execute(
+                select(SystemConfig).where(SystemConfig.key == key)
+            )
+            config = result.scalar_one_or_none()
+            return config.value if config else None
+        
+        base_url = await get_config("embedding_base_url")
+        api_key = await get_config("embedding_api_key")
+        model = await get_config("embedding_model")
+        
+        # 如果embedding没配置，回退到LLM配置
+        if not base_url:
+            base_url = await get_config("llm_base_url")
+        if not api_key:
+            api_key = await get_config("llm_api_key")
+        
+        return cls(base_url=base_url, api_key=api_key, model=model)
     
     @property
     def client(self) -> AsyncOpenAI:
         if self._client is None:
+            if not self.base_url or not self.api_key:
+                raise ValueError("Embedding API未配置，请在API设置中配置向量化服务")
             self._client = AsyncOpenAI(
                 base_url=self.base_url,
                 api_key=self.api_key

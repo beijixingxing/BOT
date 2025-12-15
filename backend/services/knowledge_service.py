@@ -12,10 +12,9 @@ class KnowledgeService:
         self.db = db
         self._embedding_service = None
     
-    @property
-    def embedding_service(self) -> EmbeddingService:
+    async def get_embedding_service(self) -> EmbeddingService:
         if self._embedding_service is None:
-            self._embedding_service = EmbeddingService()
+            self._embedding_service = await EmbeddingService.from_db(self.db)
         return self._embedding_service
     
     async def create(self, title: str, content: str, keywords: str = None, category: str = None, auto_embed: bool = True) -> KnowledgeBase:
@@ -29,8 +28,9 @@ class KnowledgeService:
         # 自动生成向量
         if auto_embed:
             try:
+                embed_service = await self.get_embedding_service()
                 embed_text = f"{title} {content[:500]}"  # 合并标题和内容前500字
-                embedding = await self.embedding_service.embed(embed_text)
+                embedding = await embed_service.embed(embed_text)
                 kb.embedding = json.dumps(embedding)
             except Exception as e:
                 print(f"[KnowledgeService] Embedding failed: {e}")
@@ -97,7 +97,8 @@ class KnowledgeService:
             return []
         
         # 获取查询向量
-        query_embedding = await self.embedding_service.embed(query)
+        embed_service = await self.get_embedding_service()
+        query_embedding = await embed_service.embed(query)
         
         # 计算相似度
         embeddings = [json.loads(kb.embedding) for kb in all_kb]
@@ -153,11 +154,12 @@ class KnowledgeService:
         )
         all_kb = result.scalars().all()
         
+        embed_service = await self.get_embedding_service()
         count = 0
         for kb in all_kb:
             try:
                 embed_text = f"{kb.title} {kb.content[:500]}"
-                embedding = await self.embedding_service.embed(embed_text)
+                embedding = await embed_service.embed(embed_text)
                 kb.embedding = json.dumps(embedding)
                 count += 1
             except Exception as e:

@@ -399,6 +399,43 @@ async def get_bot_channels(
     return _bot_channels_cache.get(bot_id, [])
 
 
+@router.get("/embedding-config")
+async def get_embedding_config(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取向量化服务配置"""
+    service = ConfigService(db)
+    base_url = await service.get_system_config("embedding_base_url")
+    api_key = await service.get_system_config("embedding_api_key")
+    model = await service.get_system_config("embedding_model")
+    
+    return {
+        "base_url": base_url or "",
+        "api_key": api_key or "",
+        "model": model or "BAAI/bge-m3"
+    }
+
+
+@router.put("/embedding-config")
+async def update_embedding_config(
+    request: dict,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """更新向量化服务配置"""
+    service = ConfigService(db)
+    
+    if "base_url" in request:
+        await service.set_system_config("embedding_base_url", request["base_url"], "向量化API地址")
+    if "api_key" in request:
+        await service.set_system_config("embedding_api_key", request["api_key"], "向量化API密钥")
+    if "model" in request:
+        await service.set_system_config("embedding_model", request["model"], "向量化模型名称")
+    
+    return {"success": True}
+
+
 @router.get("/llm-models")
 async def get_llm_models(
     db: AsyncSession = Depends(get_db),

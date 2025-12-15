@@ -519,6 +519,55 @@
               </button>
             </div>
           </div>
+
+          <!-- Embedding Config -->
+          <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+            <h2 class="text-xl font-semibold mb-4">向量化服务 (Embedding)</h2>
+            <p class="text-sm text-gray-500 mb-4">
+              用于知识库语义搜索，留空则使用上方的LLM配置
+            </p>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >API地址</label
+                >
+                <input
+                  type="text"
+                  id="embeddingBaseUrl"
+                  placeholder="如：https://api.siliconflow.cn/v1"
+                  class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >API密钥</label
+                >
+                <input
+                  type="password"
+                  id="embeddingApiKey"
+                  placeholder="留空则使用LLM的密钥"
+                  class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >模型名称</label
+                >
+                <input
+                  type="text"
+                  id="embeddingModel"
+                  placeholder="如：BAAI/bge-m3"
+                  class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+              <button
+                onclick="saveEmbeddingConfig()"
+                class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition"
+              >
+                <i class="fas fa-save mr-2"></i>保存向量配置
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- LLM Pool (模型池) -->
@@ -2056,6 +2105,7 @@
             break;
           case "llmconfig":
             loadLLMConfig();
+            loadEmbeddingConfig();
             break;
           case "botconfig":
             loadBotConfigs();
@@ -2166,6 +2216,32 @@
           loadLLMPool();
         } catch (e) {
           alert("操作失败：" + e.message);
+        }
+      }
+
+      // ========== Embedding Config Functions ==========
+      async function loadEmbeddingConfig() {
+        try {
+          const data = await api("/api/admin/embedding-config");
+          document.getElementById("embeddingBaseUrl").value =
+            data.base_url || "";
+          document.getElementById("embeddingApiKey").value = data.api_key || "";
+          document.getElementById("embeddingModel").value = data.model || "";
+        } catch (e) {
+          console.error("Load embedding config error:", e);
+        }
+      }
+
+      async function saveEmbeddingConfig() {
+        try {
+          await api("/api/admin/embedding-config", "PUT", {
+            base_url: document.getElementById("embeddingBaseUrl").value,
+            api_key: document.getElementById("embeddingApiKey").value,
+            model: document.getElementById("embeddingModel").value,
+          });
+          alert("向量配置已保存");
+        } catch (e) {
+          alert("保存失败：" + e.message);
         }
       }
 
