@@ -438,9 +438,15 @@ async def rebuild_knowledge_embeddings(
     _: bool = Depends(verify_admin)
 ):
     """重建所有知识库条目的向量"""
-    service = KnowledgeService(db)
-    count = await service.rebuild_embeddings()
-    return {"success": True, "rebuilt": count}
+    try:
+        service = KnowledgeService(db)
+        count = await service.rebuild_embeddings()
+        return {"success": True, "rebuilt": count}
+    except Exception as e:
+        import traceback
+        print(f"[Admin] Rebuild embeddings error: {e}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/knowledge")

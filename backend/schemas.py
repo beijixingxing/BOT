@@ -83,6 +83,7 @@ class KnowledgeBaseResponse(BaseModel):
     content: str
     keywords: Optional[str]
     category: Optional[str]
+    embedding: Optional[str] = None
     is_active: bool
     created_at: datetime
     

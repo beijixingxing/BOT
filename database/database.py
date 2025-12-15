@@ -40,6 +40,14 @@ async def init_db():
             )
         except:
             pass
+        try:
+            await conn.execute(
+                __import__('sqlalchemy').text(
+                    "ALTER TABLE knowledge_base ADD COLUMN embedding TEXT"
+                )
+            )
+        except:
+            pass
 
 
 async def get_db():
