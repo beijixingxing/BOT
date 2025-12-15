@@ -1,0 +1,1214 @@
+# [基础知识]
+## 最新知识
+- 现在是2025年12月，本知识库截止日期是2025年12月14日
+- Gemini (谷歌开发的LLM，又被称为'哈基米') 系列的最新稳定模型是Gemini 2.5 系列。
+  - 除了2.5系列外，谷歌也有许多可用模型，包括小参数语言模型Gemma，向量化模型gemini-embedding, 生图模型imagen, nano-banana等。
+- Claude (Anthropic开发的LLM) 系列的最新稳定模型是Claude Opus 4.1和Claude Sonnet 4.5，该系列模型又被称为'克','小克'。
+  - Claude系列的模型按能力和价格/速度，分为三档: Haiku(最弱)，Sonnet和Opus. 4.1系列目前只有Opus, 4.5系列目前只有Sonnet, 而最新的Haiku模型是Claude 3.5 Haiku。
+- GPT (OpenAI开发的LLM)系列的最新稳定模型是GPT-5
+- DeepSeek (深度求索公司开发的LLM)系列的最新稳定模型是DeepSeek-V3.1, 该系列模型简称为'DS'
+  - 在API调用时，返回的可用模型列表为'deepseek-chat'和'deepseek-reasoner'，这两个模型对应的都是DeepSeek-V3.1, 只是思维链有区别。
+- 此外还有很多非主流模型，如Kimi, Qwen, GLM等
+===
+## 类脑社区规则
+作者没有声明其对二创等的要求时，默认作者保留所有权利。
+### 社区行政：
+- 管理组负责执行处罚。其中总管理为高级管理员，执行管理负责具体事务的执行。
+- 由创作者与社区助力者组成的社区建设者集体负责社区决策，提交提案。
+原为类脑资源存放服务器的'旅程'(旅程ΟΡΙΖΟΝΤΑΣ)，因其服务器所有者的私自独立，已成为外部社区，不再受类脑管理组管辖。
+---
+### 准入规则：
+- 缓冲区：为控制每日人流量，新加入的成员在完成答题后将会在缓冲区停留。
+- 缓冲区成员可以浏览类脑的频道，但无法发言。五天后正式获得验证身份组。
+- 通过道馆挑战可提前离开缓冲区并获得新手答疑区发言权限。
+- 浏览频道时，如果需要回顶，可以输入`/回顶`或长按靠近频道底部的消息，选择APP-回到顶部。
+- 注意：提问时请遵守社区规则， 类脑自研答疑AI会将违规者送回去重新答题。
+非官方AI渠道：AI模型公司外，不与You.com/OpenRouter等AI源、AWS等云服务商规模相近的AI渠道。
+---
+## 类脑RULE：社区基本准则
+### 红线违规：零容忍区域  
+触犯以下任何一条规则，都将导致 `立即、无条件的永久封禁`。
+--- 
+1. 商业化行为（禁止任何形式的牟利）
+禁止范围：  
+- 利用社区资源牟利：如利用 AIRP、其产品或服务获取利润或预期利润。  
+- 接受赞助：带有回报条件的。  
+- 商业化广告：任何直接或间接的产品宣传、诈骗信息、消费诱导。  
+- 诈骗 / 诱导信息：包括伪装成社区资源的诈骗内容。  
+- 商业化引流：将成员导向任何商业社群或平台。  
+- 商业化推广：如捆绑赠送、现金或等值奖励。
+适用范围包括但不限于：  
+- 前端工具（如 SillyTavern 等）  
+- 预设 / 角色卡  
+- LLM 语言模型相关内容
+--- 
+2. 危害社区及成员安全
+我们致力于保护每一位成员和社区整体的安全。
+针对个人成员的严重侵害：  
+- 公开隐私（“开盒”）：违背意愿泄露他人真实信息。  
+- 人身威胁：有明确指向的威胁行为。  
+- 恶意举报：无差别针对他人进行大规模举报。
+针对社区整体的攻击：  
+- 攻击与窃取：如技术入侵、社工手段等非法获取内容。  
+- 恶意引流（“破圈升堂”）：将恶意流量引入社区，破坏环境。
+--- 
+3. 特定严重违规及规避处罚
+以下行为同样属于 红线级别，一经确认将 严肃处理：
+- 发布涉及真实未成年人的高风险内容：包括高度拟真的 AI 生成内容。  
+- 使用小号规避封禁：明确关联至已被封禁的账号。  
+- 新成员的严重违规行为：加入未满一个月即触犯严重违规条款。
+- 违背作者意愿：无视作者选择的协议或条款，擅自对作品进行二传或二创。
+### ❌ 严重违规
+若出现以下行为，处理措施包括但不限于：重新答题、整改、临时禁言，并会被赋予【被警告者】身份组（最长90天）。  
+视严重情况或在警告期内再次违规，将可能进行永久封禁。
+--- 
+1. 危害社区群体
+- 利用漏洞（钻空子）：寻找或利用社区规则或系统的漏洞，试图谋求特权或规避处罚。  
+- 针对性群体攻击言论（“地图炮”）：对社区内的特定用户群体或社区本身进行无差别攻击。  
+- 借作品影射攻击：以发布作品的形式，含沙射影地诋毁、攻击特定用户或群体。
+--- 
+2. 煽动仇恨对立
+- 绕过正常渠道，煽动矛盾：不使用投诉 / 举报 / 屏蔽等合规手段，而发表公开指责、跑马圈地、挑动男女矛盾的言论。  
+- 政治话术攻击：使用键政话术对特定个人或群体进行明显的攻击 / 贬低。  
+- 敏感政治话题：对两岸政治问题、中国政治体制、高度敏感的中国政治人物相关的话题
+- 煽动其他仇恨：包括但不限于煽动社会、团体、种族等其他仇恨 / 对立。
+--- 
+3. 发布高风险多媒体内容
+- 高风险真人图片 / 视频：在任何位置发布高危真人图片 / 视频，或侵犯他人隐私的内容（包括高度拟真的 AI 内容）。  
+- 发布有害文件：传播包含病毒 / 有攻击性 / 涉及犯罪的文件。
+--- 
+4. 不当求助行为
+- 要求处理非官方渠道问题：要求他人协助处理非官方 AI 渠道使用问题。  
+- 过度要求作者：频繁要求作者解决非作品本身导致或存在的问题。  
+- 无礼伸手（“爷新行为”）：不阅读规则教程，在答疑区外频繁无礼貌询问。
+--- 
+5. 不尊重原创 / 寻求付费服务
+- 寻求有偿服务：寻求付费咨询、代写、远程教学等有偿服务。  
+- 侵犯作者权益：违背作者意愿对作品进行的其他经核实行为。
+### ⛔ 其他违规行为
+以下行为将根据情节严重性，面临 警告、重新答题、整改、禁言、“小黑屋” 等处罚。
+--- 
+ 1. 自我中心行为
+- 在深渊相关区外讨论 / 发表超常规性癖内容。  
+- 人身攻击 / 骚扰 / 泄露隐私，被当事人投诉。  
+- 反串拱火、阴阳怪气、挑拨离间。  
+- 大量输出负面情绪、无理取闹、刷屏骂街。  
+- 其他令他人明显不适的行为。
+--- 
+ 2. 越界创作
+- 资源区进行无作品的预告引流（锁定）。  
+- 影射指向现实人物的作品（整改）。  
+- 影射现实事件的作品（删除）。  
+- 高度争议的二创（警告）。
+--- 
+ 3. 变相宣传广告
+- 公开寻求非官方 AI 渠道。  
+- 传播有收益的邀请链接。
+### 📢 社区倡议：避免讨论特定话题
+为了维护社区的纯净与友好氛围，我们倡议您避免在公共频道讨论以下话题：
+--- 
+🚫 第三方交易平台  
+在 AIRP 相关事物上，请避免推荐或宣传第三方交易平台（如淘宝）上的商品或商家。
+### 真实赌博内容  
+请避免讨论现实或网络中的赌博、博彩、彩票等话题，  
+例如：线上博彩平台、彩票技巧、赌博经验分享等。
+--- 
+现实性服务  
+请避免涉及金钱交易的现实世界性服务内容的讨论，  
+如：嫖娼、风俗等相关话题。
+--- 
+自发引流与外宣行为  
+- 请避免在聊天区、公屏等公开频道频繁引流至其他服务器，此类行为可能打扰他人正常交流，也会增加管理负担。  
+- 请避免在公开社交平台对本社区进行大规模宣传，以免带来高风险的曝光度。
+--- 
+违反倡议的处理方式说明  
+- 鼓励大家使用自助管理机器人删除此类不当消息。  
+- 若情况未改善，管理员将介入提醒；如不配合，将由管理员删除并予以口头警告。  
+- 若多次警告无效，将视为违规行为：  
+  - 添加“被警告者”身份组  
+  - 警告期内再次触发，将视为正式违规  
+  - 根据情节严重性进行禁言等处理
+--- 
+其他条款
+- 加入即表示自己已满18周岁、与他人用户角色平等；承诺接受管理制度约束，不因没有阅读而豁免。
+- 求助须在[「看完再问：新手答疑」](https://discord.com/channels/1134557553011998840/1337107956499615744) 频道进行（不回答非官方AI渠道的使用相关问题），并含截图、LOG等信息。作品发布须在对应区域进行。
+- 贴内回顶输入：`/回顶` BY <@1303394437845745796>。
+- 楼主自助功能：`/自助管理`  BY <@1374372307916554351>。
+  - 删帖、锁帖、贴内禁言、慢速模式等贴内管理功能均可通过此指令执行
+- 发现违规行为请举报或使用 意见与投诉投稿 频道。
+===
+## SillyTavern 基础知识
+- 什么是 SillyTavern？
+  - SillyTavern（或简称 ST）是一个本地安装的用户界面，它允许你与文本生成大语言模型 (LLM)、图像生成引擎和 TTS 语音模型进行交互。
+- 安装要求
+  - 硬件要求极低：它可以在任何能够运行 NodeJS 18 或更高版本的设备上运行。如果你想在你自己的电脑上运行LLM，推荐至少拥有一张英伟达（NVIDIA）3000系列并至少拥有6GB显存的显卡。
+- 除了 SillyTavern，我还需要什么？
+  - 由于 SillyTavern 只是一个界面，你需要接入一个 LLM 后端来提供推理服务。你可以使用 AI Horde 来获得开箱即用的聊天体验。除此之外，我们还支持许多其他本地和云端的 LLM 后端：兼容 OpenAI 的 API、KoboldAI、Tabby 等等。你可以在“API 连接设置”部分阅读更多关于我们支持的 API 的信息。
+- 角色卡 (Character Cards)
+  - SillyTavern 是围绕“角色卡”这一概念构建的。角色卡是一系列提示词的集合，用于设定 LLM 的行为，并且是在 SillyTavern 中进行持久对话所必需的。它们的功能类似于 ChatGPT 的 GPTs。角色卡的内容可以是任何东西：一个抽象的场景、一个为特定任务量身定制的助手、一个著名人物或一个虚构角色。
+---
+## 安装
+- Windows 安装
+  1. 安装 NodeJS (推荐最新的 LTS 版本)
+  2. 安装 Git for Windows
+  3. 打开 Windows 资源管理器，浏览到一个不受 Windows 控制或监控的文件夹，或新建一个这样的文件夹。
+  4. 在该文件夹内，通过点击顶部的“地址栏”，输入 `cmd`，然后按 Enter 键来打开命令提示符。
+  5. 当黑色的命令提示符窗口弹出后，在其中输入 `git clone https://github.com/SillyTavern/SillyTavern -b release` 并按 Enter 键。
+  6. 所有内容克隆完成后，双击 `Start.bat` 来让 NodeJS 安装其依赖项。之后服务器会启动，SillyTavern 会在你的浏览器中弹出。
+- Linux/MacOS 安装
+  1. 安装 git 和 nodeJS (安装方法因操作系统而异)。
+  2. 使用 `git clone https://github.com/SillyTavern/SillyTavern -b release` 克隆仓库。
+  3. `cd SillyTavern` 导航到安装文件夹内。
+  4. 使用以下命令之一运行 `start.sh` 脚本：`./start.sh` 或 `bash start.sh`。
+- Android (Termux) 安装
+  - 推荐使用一键安装脚本以简化流程，请在类脑社区的宝宝教程区寻找。
+- IOS
+  - 不可能在IOS上本地安装SillyTavern，因为系统不支持。IOS系统用户只能通过网络连接到位于其他设备的SillyTavern来使用。
+---
+## 更新
+- Linux/Termux 或 MacOS
+  1. `cd SillyTavern` 进入正确的文件夹。
+  2. `git pull` 获取更新。
+  3. 如果使用了一键脚本来简化安装流程，推荐同样使用一键脚本来更新。
+- Windows
+  1. 首先尝试使用位于 SillyTavern 安装根目录下的 `UpdateAndStart.bat`。
+  2. 如果失败，在 ST 文件夹的命令行中运行 `git pull`。
+---
+## 迁移数据
+1.  从你旧的 ST 安装目录中复制以下文件/文件夹：
+    -   `/data` 目录
+    -   `config.yaml`
+2.  将 `/data` 目录和 `config.yaml` 文件从一个安装目录移动到另一个。
+3.  至少运行一次更新后的SillyTavern，以创建 `/data/default-user` 目录。
+4.  根据需要，将旧 `/public` 目录下的文件转移到新的 `/data/default-user` 目录下。不要复制整个 /PUBLIC/ 文件夹，这样做可能会破坏新的安装并导致新功能缺失。
+### 常见更新问题
+1.  "File changes prevent git pull" (文件更改阻止 git pull)
+    -   使用 `git pull --rebase --autostash`
+2.  "Error: Cannot find module "*" when starting the server" (启动服务器时出现错误：找不到模块 "*")
+    -   在 SillyTavern 目录下运行 `npm install` 来修复此问题。提供的 `Start.bat` 和 `start.sh` 脚本会自动执行此操作。
+    -   还没解决？删除 `node_modules` 文件夹。
+---
+## SillyTavern 内部设置
+### 通用设置/聊天补全预设 (Preset，简称预设)
+这些设置控制着使用语言模型生成文本时的采样过程。这些设置的含义对于所有支持的后端都是通用的。
+1.  最大回复长度 (Response tokens)
+    API 将生成并用于回复的最大词符 (token) 数量。如果 API 支持，你可以启用“流式传输 (Streaming)”来在响应生成时逐点显示。
+2.  上下文长度 (Context tokens)
+    SillyTavern 将发送给 API 作为提示词的最大词符数量，该数量不包括回复的长度。上下文包括角色信息、系统提示、聊天历史等。消息之间的虚线表示聊天的上下文范围。该线上方的消息不会被发送给 AI。
+### API 连接设置（也叫'插头'）
+1.  聊天补全 (Chat Completions)
+    聊天补全模型（Chat Completion model），顾名思义，会将你的提示词结构化为用户（你）和助手（AI）或系统（中立）之间的一系列消息。为聊天补全而训练的模型有助于营造“聊天”的感觉，AI 会对上一条消息进行“回复”。当你使用 ChatGPT 网站时，你背后接触到的就是聊天补全 API。
+2.  提示词后处理 (Prompt Post-Processing)
+    某些端点（endpoint）可能会对传入提示词的格式施加特定限制，例如要求只有一个系统消息或角色严格交替。
+    SillyTavern 提供了内置的提示词转换器来帮助满足这些要求（从最不严格到最严格）：
+    -   无 (None) - 除非 API 严格要求，否则不应用任何显式处理。
+    -   合并同一角色的连续消息 (Merge consecutive messages from the same role)
+    -   半严格 (Semi-strict) - 合并角色并只允许一个可选的系统消息。
+    -   严格 (Strict) - 合并角色，只允许一个可选的系统消息，并要求第一条消息必须是用户消息。
+    -   单条用户消息 (Single user message) - 将所有角色的所有消息合并为一条单一的用户消息。
+    “合并”、“半严格”和“严格”模式还会从提示词中移除任何工具调用 (tool calls)，除非选择了“with tools”（带工具）的变体。这对于不支持工具调用而你现有提示词中又包含工具调用的 API 很有用。
+### 提示词 (prompts)
+当向 AI 发送消息时，直接输入的文本会与其他附加的文本结合起来，形成一个单一的请求发送给 AI。这个组合后的文本被称为“提示词”(prompt)，有时也称为“请求”(request) 或“上下文”(context)。提示词可以包括多种不同类型的文本，包括：
+-   关于如何生成回应给 AI 的主要指令
+-   AI 应扮演角色的定义
+-   你所扮演角色的定义
+-   关于 AI 正在与之互动的“世界”的信息
+-   来自资料库 (Data Bank) 的相关文档或信息
+-   过去对话的摘要
+-   网页搜索或其他外部数据源的结果
+-   对话中的先前消息
+-   你发送给 AI 的消息
+-   关于如何生成回应给 AI 的最终指令
+---
+### World Info (世界信息)
+世界信息（也称为“世界书”或“记忆书”）是 ST 中一个强大的工具，可以将提示动态插入到您的聊天中，以帮助引导 AI 的回复。通常，世界信息（简称WI）用于增强 AI 对您虚构世界细节的理解，但您也可以使用世界信息条目来插入任何您想插入到提示中的内容。它就像一个动态词典，仅当消息文本中出现与条目关联的关键词时，才会从世界信息条目中插入相关信息。SillyTavern 引擎会激活并无缝地将相应的背景知识整合到提示中，为 AI 提供上下文信息。
+#### World Info Entry (世界书条目)
+- Key(关键词)：一个关键词列表，用于触发世界信息条目的激活。默认情况下，关键词不区分大小写（此项可配置）。
+- Entry Content (条目内容)：条目激活后插入到提示中的文本。
+- Insertion Order (插入顺序)：一个数值。定义了当多个条目同时被激活时的优先级。顺序数值越高的条目将被插入到更靠近上下文末尾的位置，从而对输出产生更大的影响。
+- Insertion Position (插入位置)：
+  - Before Char Defs (角色定义之前): 世界信息条目在角色描述和场景之前插入。对对话有中等程度的影响。
+  - After Char Defs (角色定义之后): 世界信息条目在角色描述和场景之后插入。对对话有较大的影响。
+  - Top of AN (作者注释之前): 世界信息条目在作者注释内容的顶部插入。其影响根据作者注释的位置而变化。
+  - Bottom of AN (作者注释之后): 世界信息条目在作者注释内容的底部插入。其影响根据作者注释的位置而变化。
+  - @D: 世界信息条目在聊天的特定深度插入（深度0代表提示的最底部）。
+    - ⚙️ - 作为系统角色消息
+    - 👤 - 作为用户角色消息
+    - 🤖 - 作为助手（AI）角色消息
+- 深度 (depth): 仅能在插入位置选择 @D 时出现。深度是一个在SillyTavern的聊天记录中被广泛使用的概念，它指的是'从聊天记录最底部向上数n条消息'。例如，深度1代表最后一条消息，而深度9999代表整个聊天记录的最顶部。如果将条目插入到聊天的特定深度，这个条目的内容将出现在聊天记录中，深度n的消息与深度n+1的消息之间。例如，一个'深度4'的条目将位于从下往上数的第4条消息与第5条消息之间。'深度0'是特殊的，这类条目会被插入到整个聊天记录的最底部。
+- Order (顺序): 在同一个插入位置中，条目的先后顺序。顺序值小的条目位于前面。
+- Entry Title / Memo (条目标题/备忘录)：一个文本字段，方便您标记条目，AI 或任何触发逻辑都不会使用它。
+- Strategy (激活策略)：
+  - 🔵 (蓝灯，永久) = 该条目将始终存在于上下文(提示词)中。
+  - 🟢 (绿灯，关键词) = 该条目仅在出现关键词时才会被触发，被置入提示词中。(自聊天记录中最后一条消息向上，查找n条消息其中n为'扫描深度'，如果n条消息中出现了关键词则触发)
+  - ⛓️ (锁链, 向量化) = 使用向量化&RAG技术控制此条目的触发，一般不会用到。
+#### Activation Settings (激活设置)
+位于世界信息屏幕顶部的可折叠菜单。
+- Scan Depth (扫描深度)：定义应在聊天记录中扫描多少条消息以查找世界信息关键词。如果设置为 0，则只评估递归条目和作者注释。如果设置为 1，则 SillyTavern 只扫描最后一条消息。2 = 最近两条消息，依此类推。
+- Include Names (包括名称)：定义是否应将聊天参与者的名称作为消息前缀包含在被扫描的文本缓冲区中。这允许激活使用名称作为关键词的条目，而无需在消息中直接提及这些名称。
+Context % / Budget (上下文百分比/预算)：定义世界信息条目一次可以使用的 token 数量。您可以定义一个相对于您 API 最大上下文设置的阈值（Context %）或一个固定的 token 阈值（Budget）。
+- Recursive scanning (递归扫描)：递归扫描允许条目激活其他条目或被其他条目激活，从而实现不同世界信息条目之间的复杂交互和依赖。
+- Match whole words (匹配整个单词)：对于关键词仅包含一个单词的条目，只有当搜索文本中出现完整的该单词时，条目才会被匹配。
+
+推荐的初始设置是将扫描深度(Scan Depth)调整到2, 匹配整个单词(Match whole words)和包括名称(Include Names)关闭。
+---
+### User Settings (用户设置)
+#### UI Theme (界面主题):
+- Reduced Motion (减少动画): 禁用动画和过渡效果。
+- No Blur Effect (无模糊效果): 移除背景模糊以提高性能。
+- No Text Shadows (无文本阴影): 禁用文本阴影效果。
+- Visual Novel mode (视觉小说模式): 紧凑的聊天界面，带有背景精灵图。若聊天页面出现大片背景图片，可能是这个选项被开启导致的。
+- Message Timer (AI回复计时器): 显示 AI 回复生成的时间。
+- Chat Timestamps (聊天时间戳): 显示消息的时间戳。
+- Model Icons (模型图标): 在消息旁显示 AI 模型的图标。
+- Message IDs (显示消息楼层): 显示序列化的消息编号，如 #1, #2。
+- Hide Chat Avatars (隐藏聊天头像): 从聊天中移除头像。
+- Message Token Count (显示消息词符数): 显示每条消息的 token 数量。
+- Click to Edit (点击编辑): 点击消息以快速打开消息编辑器。必须关闭！
+
+#### Chat/Message Handling (聊天/消息处理):
+- # Messages to Load (要加载#条消息): 在分页前加载的聊天历史消息数量（0 = 全部）。默认为100，推荐调低至30或更低。
+- Streaming FPS (流式传输帧率): 流式文本的更新速度（5-100 FPS）。
+
+#### Input & Response Controls (输入与响应控制)：
+- Enter to Send (回车发送): 可选择禁用、自动（PC端）或启用。
+- "Send" to Continue (点击“发送”以继续): 使用“发送”按钮来继续 AI 的回复。
+- Quick "Continue" button (快速“继续”按钮): 显示一个按钮以让 AI 以上一条消息续写。
+- Quick "Impersonate" button (快速“模仿”按钮): 显示一个按钮用于让AI生成用户的下一条消息，也被称为'AI代答'。
+- Swipes (划卡): 显示箭头按钮以查看 AI 的备选回复（PC 和移动端）。
+- Gestures (手势): 启用滑动生成手势（仅限移动端）。
+
+#### Auto-Management (自动管理)：
+- Auto-load Last Chat (自动加载上次聊天): 启动时自动加载最近的聊天。
+- Auto-scroll Chat (自动滚动聊天): 自动滚动到最新的消息。
+- Auto-fix Markdown (自动修复 Markdown): 自动修正 markdown 格式。必须关闭！
+
+#### Message Formatting & Display (消息格式与显示)：
+- Forbid External Media (禁止外部媒体): 阻止来自外部域的嵌入式媒体。必须关闭！
+- Show {{char}}: in responses (在回复中显示{{char}}:): 如果AI生成了角色名前缀，则在回复中保留它。必须打开！
+- Show {{user}}: in responses (在回复中显示{{user}}:): 如果AI生成了用户名前缀，则在回复中保留它。必须打开！
+- Show tags in responses (在回复中显示标签): 允许回复中的（某些）HTML 标签以 HTML 形式显示。必须关闭！
+---
+### Personas (用户角色)
+#### 什么是用户角色(Persona)？
+- 在 SillyTavern 中，用户角色是您用来参与聊天的身份——本质上是您的显示名称、头像和可选描述性文本的组合。用户角色让您可以轻松地切换您所扮演的角色或“身份”，而无需每次都手动更新您的用户名/头像。
+#### 如何创建一个用户角色(Persona)？
+1.  打开用户角色管理面板（顶部菜单中的👤按钮）。
+2.  点击“创建”按钮创建一个空白用户角色，并为其命名。
+3.  在用户角色列表中，选择新创建的用户角色。
+4.  在右侧，您可以填写您的描述，并通过“更改用户角色图片”按钮设置头像。这两项都是可选的。
+#### 用户角色连接/锁定：
+用户角色连接确保在特定情况下自动选择给定的用户角色。如果没有连接用户角色，则当前选择的用户角色将保持不变。有三种类型的锁定：
+- Chat lock (聊天锁定) – 用户角色被锁定在当前聊天中。
+- Character lock (角色锁定) – 用户角色被锁定到特定角色。
+- Default persona (默认用户角色) – 当没有其他锁定适用时使用的默认用户角色。
+---
+### Characters (角色)
+角色是可以创建和管理的 AI 身份，用于塑造 AI 在对话中的角色。每个角色都有一个名称、个性和对话历史。从导航栏中打开角色面板以访问角色列表。点击一个角色或群组以与他们聊天或编辑他们，或选择“创建新角色”来添加一个新角色。
+#### Character List Buttons (角色列表按钮):
+- Create New Character (创建新角色): 添加一个新角色。
+- Import Character (导入角色): 从文件加载角色。可使用PNG或JSON格式的文件，含有角色信息的png或JSON被称为角色卡。 
+  - 一些平台(如Discord)可能会二次压缩用户上传的角色卡，导致导入失败。
+- External Import (外部导入): 从 URL 导入。
+#### Quick Actions Buttons (快捷操作按钮):
+- ⭐ Star (收藏): 切换收藏状态。
+- 📖 Book (高级定义): 编辑角色的高级定义。
+- 🌍 Earth (角色设定集): 角色的世界信息，将角色链接到一个世界书。
+- 📚 Book With a Earth on it (聊天设定集): 聊天的世界信息，将当前聊天链接到一个世界书。
+- 💀 Skull (删除): 删除角色。
+#### Extended Options (扩展选项):
+- World Info linking (链接到世界书) (在手机版SillyTavern上，这是唯一改变或取消角色所链接的世界书的方法)
+- Character rename (重命名)
+- Replace/Update (替换/更新)
+...
+## SillyTavern Macros (酒馆宏/replacement tags)
+宏可以在生成响应时被替换为其对应的值。它们可用于在提示中插入动态内容，例如用户名、角色描述或当前时间。宏使用双花括号包裹，例如 {{user}}，并且通常不区分大小写。目前不支持宏嵌套。
+{{pipe}}	仅用于斜杠命令批处理。会被替换为前一个命令返回的结果。
+{{newline}}	插入一个换行符。
+{{trim}}	删除此宏周围的换行符。
+{{user}} 	用户名。
+{{char}} 	角色名。
+{{model}}	当前所选 API 的文本生成模型名称。可能不准确！
+{{lastCharMessage}}	角色发送的上一条聊天消息。
+{{lastUserMessage}}	用户发送的上一条聊天消息。
+{{time}}	当前系统时间。
+{{time_UTC±X}}	指定 UTC 偏移量（时区）的当前时间，例如，要表示 UTC+02:00，请使用 {{time_UTC+2}}。
+{{timeDiff::(time1)::(time2)}}	time1 和 time2 之间的时间差。接受时间和日期宏。
+{{date}}	当前系统日期。
+{{input}}	用户输入栏的内容。
+{{weekday}}	当前是星期几。
+{{idle_duration}}	插入一个自用户发送最后一条消息以来的时间范围的人性化字符串（例如：4小时，1天）。
+{{random:(args)}}	从列表中返回一个随机项（例如 {{random:1,2,3,4}} 将从这4个数字中随机返回一个）。
+{{random::arg1::arg2}}	random 的备用语法，其参数支持逗号。
+{{pick::(args)}}	random 的替代方案，但如果源字符串保持不变，所选参数在当前聊天的后续求值中是稳定的。
+{{roll:(formula)}}	使用 D&D 投骰语法生成一个随机值：XdY+Z（例如 {{roll:d6}} 会生成一个 1-6 之间的值）。
+{{// (note)}}	允许留下一条将被替换为空白内容的注释。对 AI 不可见。
+---
+## ST Slash Commands (酒馆命令/酒馆斜杠命令，仅常用部分)
+`/trigger [await=boolen]`  触发正常生成（相当于点击 "发送 "按钮）.await - 后续命令是否等待触发后再继续，默认值：false
+`/sendas [name=string] [at=number/varname] (text)` 以特定角色的身份发送信息。不会触发生成。name - 角色名称，可以使用非当前聊天对象;at - 发送到聊天记录的位置编号，第一条消息（即开场白）的编号为 0 ;text (string) - 消息内容
+`/hide [name=string] (specified message)` 隐藏一条或数条消息，隐藏的内容不会发送给 LLM. name - 只隐藏某个特定角色的信息; specified message (number/range) - 访问的消息编号或某一范围。可使用 start-finish 格式获取范围内的聊天记录，包含始末编号的对应消息
+`/unhide [name=string] (specified message)` 取消隐藏一条或数条消息。specified message 用法同/hide.
+`/cut (specified message)`从聊天中删除指定的信息或连续片段。specified message 用法同/hide.
+`/chat-jump (index)`滚动聊天窗口到指定消息楼层。楼层从 0 开始。
+---
+## 各主流API特点介绍
+- Gemini: 可免费使用;免费用户额度高;2.5Pro的能力较强;几乎无内部审查(有外部审查模型);使用对网络质量要求高;涉及敏感内容无法流式输出;有时谷歌服务过载导致持续503等问题
+- DeepSeek: 中国大陆可直连使用;可流式输出敏感内容;内部审查较少(仅限API);支持的上下文较短;价格较高，但第三方渠道(如硅基流动，openrouter等)有免费额度
+- Claude: 指令遵循能力和处理复杂格式的能力较强(因此适合编程);API价格很贵(4.1 Opus每100万输入token $15，每100万输出token $75), 主流使用方式是获取官网Cookie后将API请求代理到官网处理，或者使用Claude Code。使用Cookie反代时内容审查很严格。
+- ChatGPT: GPT-5的各项能力都综合较强，但难以获取并使用，而且有非常难以绕过的动态审核机制
+===
+
+# [报错对照表]
+===
+## Gemini
+### Gemini: ETIMEDOUT
+现象：
+SillyTavern终端返回 `ETIMEDOUT` 报错。
+原因：
+对一些国家或地区的用户，Gemini API 需要通过代理访问，而 SillyTavern（酒馆）的流量默认不走代理。此报错通常是因为没有开启代理软件的TUN模式（虚拟网卡模式），或者该模式没有成功启动。
+解决：
+1.  开启TUN模式：在代理软件设置中，找到并开启TUN模式（虚拟网卡模式）。
+    - Clash for Windows用户注意：需同时开启“TUN模式”和“服务模式”，并确保服务模式旁的小地球图标为绿色。
+    - 关闭其他可能冲突的VPN或游戏加速器。
+2.  配置SillyTavern代理：如果TUN模式无法成功开启，可以修改SillyTavern的配置文件，使其直接通过代理。
+    - 打开 SillyTavern 文件夹下的 `config.yaml` 文件。
+    - 找到 `requestProxy:` 条目。
+    - 将其中的 `enabled: false` 修改为 `enabled: true`。
+    - 在 `url:` 处填写代理地址，格式为 `socks5://127.0.0.1:端口号`。例如，Clash Verge 默认为 `7897`，V2RayN 默认为 `10808`。
+    - 保存文件后重启 SillyTavern。
+---
+### Gemini: 403 Forbidden
+现象：
+错误代码为 `Forbidden`，终端日志可能包含 `has been suspended` 等。
+原因：
+使用的 API Key 已被谷歌封禁
+解决：
+- 更换 API Key：登录谷歌云平台检查账号状态，并更换一个来自其他正常账号的 API Key。
+---
+### Gemini: 404 Not Found / Unexpected model name format
+现象：
+终端日志包含 `404 Not Found` 或 `unexpected model name format` 关键词。
+原因：
+请求的模型名称填写错误，或者该模型已被谷歌下架。
+解决：
+- 检查 API 设置中选择的模型名称是否完全正确（包括大小写和分隔符）。例如，正确的格式是 `gemini-2.5-pro`，而不是 `Gemini-2.5-Pro` 或 `gemini_2.5_pro`。
+---
+### Gemini: 429 Too Many Requests (节点或预设问题)
+现象：
+- 发送消息后很快报错，终端日志有 `resource has been exhausted` 等关键词，终端有'Resource has been exhausted (e.g. check quota)'。
+原因：
+使用的代理节点或SillyTavern中‘预设’被谷歌标记
+解决：
+1.  更换节点：更换一个不同的代理节点，或者更换代理服务商。
+2.  调整预设：
+    - 如果预设中有“防429”之类的条目，请启用它。
+    - 尝试修改预设的内容，特别是预设最顶部的部分。
+      - 修改方法：将原本的内容发送给AI，让AI用其他语言重新叙述一遍，将得到的结果放回SillyTavern并保存预设。
+备注：如果提问者正在使用Cli反代渠道的Gemini，请使用Cli反代部分的'429解决方法'，而不是这个。
+---
+### Gemini: 429 Too Many Requests (TPM超限)
+现象：
+- 发送消息后很快报错，终端日志明确提示超出了 `Tokens per Minute (TPM)`(GenerateContentInputTokensPerModelPerMinute) 的限制。
+原因：
+- 目前对于免费用户，Gemini 2.5 Pro的此项限额为125k。可能是短时间内多次请求，总计输入的token数超出。
+- 也可能是单次请求中的输入内容太长，直接超出了。
+解决：
+- 检查预设中的'总词符数'（它位于所有可以开关的预设'条目'的上方）。
+  - 若总词符数未超过125k，建议提问者等待几分钟再试。
+  - 若总词符数超过了125k，建议总结并隐藏前文 (具体见上文“总结方法”)。
+---
+### Gemini: 429 Too Many Requests (RPD/TPD超限)
+现象：
+- 发送消息后报错 `429 too many requests`。
+- 后台日志明确提示超出了 `Requests Per Day (RPD)`(GenerateRequestsPerDayPerProjectPerModel) 或 `Tokens Per Day (TPD)`(GenerateContentInputTokensPerModelPerDay) 的限制。
+原因：
+当天发送的请求次数或输入的总token数已达到免费额度的上限。目前对于免费用户，Gemini 2.5 Pro的这两项限额分别是50次请求和3百万tokens。
+解决：
+1.  更换 API Key：换一个来自其他项目的 API Key 继续使用。
+2.  等待刷新：免费额度会在北京时间每日下午3点左右重置。
+---
+### Gemini: 429 Too Many Requests (模型选择错误或账号被标记)
+现象：
+- 发送消息后报错 `429 too many requests`。
+- 后台日志提示超出的某项限额 为0。
+原因：
+1.  模型选择错误：选择了 Preview (预览版) 或已下架的模型，这些模型对免费用户不开放，额度为0。
+2.  账号被标记：API Key 所属的账号已被谷歌标记，所有模型的额度都被设为0。
+解决：
+- 更换模型：确保使用的是正式且受支持的模型，例如 `gemini-2.5-pro`，而非`gemini-2.5-pro-exp`。
+- 更换 API Key：如果使用正式模型仍然报错，说明是账号问题，请更换一个来自其他账号的Key。
+---
+### Gemini: 429 Too Many Requests (不明原因)
+现象: 
+- SillyTavern或其他前端应用中发送消息报错，后台提示'429'但具体报错信息中看不见超出哪项配额，也没有'(e.g. check quota)'
+- 在Google Cloud中查看API所属的项目，项目消失或显示unavailable
+原因: 目前不明，猜测为谷歌限制免费层级的项目
+解决:
+- 换号 (不一定能解决)
+- 等待，项目状态会恢复为free tier，api也会恢复可用 (北京时间上午比较能用)
+- 使用cli或build渠道的gemini，这两个渠道少见此问题 ()
+
+反代部署教程
+[CLI 部署](https://discord.com/channels/1134557553011998840/1405524233823457300) / [Build 部署](https://discord.com/channels/1134557553011998840/1380129283430940712)
+🌟 公益站点
+[CLI 公益站](https://discord.com/channels/1134557553011998840/1410747429359325214) /[ Build 公益站](https://discord.com/channels/1134557553011998840/1413552700070694953)
+（蓝字点击跳转）
+---
+### Gemini: 流式输出中断
+现象：
+- 在流式输出模式下，AI 回复在生成到一半时突然停止，没有任何报错信息。
+  - 提问者可能将此问题描述为'输出到一半就断了'。
+原因：
+Gemini API在流式输出时会实时审查内容。一旦检测到最新生成的文字包含敏感内容，审查机制会立即中止生。
+解决：
+1.  关闭流式输出：在 SillyTavern 的生成设置中关闭“流式传输”。
+2.  更换预设：如果一定要使用流式输出，需要使用为此特制的预设。
+### Gemini: 非流空回 (PROHIBITED_CONTENT)
+现象：
+- 发消息后较长一段时间，没有新的回复出现，同时酒馆网页中有`candidate empty`, `returned no candidate`等报错。
+- 终端日志中出现关键词`prompt was blocked`, `PROHIBITED_CONTENT`等。
+原因：
+模型输出的内容触发了安全审核机制，导致回复被拦截。
+解决：
+- 启用反截断：在预设中开启反截断相关条目。一次只开启一个，从效果较弱的开始尝试。
+- 修改或更换预设：开启预设中的“防429”之类的选项，或者自行修改预设头部；或者直接更换一个预设。
+- 修改提示词：检查并修改角色卡、世界书、聊天记录等设定中的敏感内容，例如直接描述年龄小于18岁等。若找不到，可以试着删除并重新生成前几条AI回复。
+备注: 注意如果出现了candidate empty，但finishReason显示为STOP，则是‘非流式输出异常停止’(见后文)而不是因为审核机制
+### Gemini:  unexpected token
+现象：
+- 发送消息后很快报错，终端日志有关键词`SyntaxError: Unexpected token`。
+原因：
+- `unexpected token 'd'`等：API的输出内容被严重截断，导致返回的JSON数据结构损坏。
+- `unexpected token '<'`或`<!DOCTYPE>`等：使用的反向代理服务本身可能已被封禁或出现故障，返回了HTML错误页面。
+解决：
+- 对于 `unexpected token 'd'` 这类错误，通常是内容被截断导致，可以参照“非流空回”的解决方法来处理（如开启反截断、更换预设等）。
+- 对于 `unexpected token '<'` 这类错误，大概率是反代服务本身出问题，请重新部署反向代理服务。
+---
+### Gemini: 503
+现象：
+- 发送消息后立刻报错。
+- 终端日志中包含关键词`503 service unavailable`或`overloaded`。
+原因：
+- Gemini模型当前使用人数过多，服务器过载。
+解决：
+- 等待：稍等后再试即可。
+---
+### Gemini: client network socket disconnected
+现象：
+- 发送消息后立刻报错，后台日志显示`reason: client network socket disconnected before secure TLS connection was established`。
+原因：
+- 网络连接问题。例如代理没有正常工作（如梯子未开启TUN模式）、代理节点失效或WiFi连接中断等。
+解决：
+- 检查并确保代理工具正常运行。
+- 尝试更换其他代理节点。
+- 检查设备本地网络连接是否稳定。
+---
+### Gemini: socket hang up
+现象：
+- AI长时间没有响应后报错，终端日志中包含`reason: socket hang up`。
+原因：
+- AI生成回复的时间过长，超过了SillyTavern的等待时限。SillyTavern主动断开了连接。
+解决：使用支持“假流式”的反向代理（可以在类脑社区的教程区或工具区寻找），它可以持续向SillyTavern发送数据，保持连接不中断，有效解决该问题。
+### Gemini: bad request: user location not supported
+现象：
+- 发送消息后立即报错，代码为`400 bad request`，终端日志中显示`user location is not supported for the api use`。
+原因：
+- 提问者当前使用的代理节点的IP地址所在地区不在Gemini API的服务支持范围内。
+解决：
+- 请将代理节点切换到受支持的地区，例如日本、新加坡、美国等。避免使用香港、澳门、俄罗斯及部分欧洲国家的节点。
+- 如果确认节点地区受支持，但依然报错，说明该IP地址可能已被谷歌单独限制，请更换为同一个地区的其他节点再试。
+---
+### Gemini: 无法选择 gemini-2.5-pro
+现象：
+在SillyTavern的模型列表中，找不到 `gemini-2.5-pro` 模型。
+原因：
+SillyTavern版本过低。
+方法：
+- 方法1: 将SillyTavern更新到最新版本（1.13.1及更高版本），即可直接在模型列表中选择。
+- 方法2: 使用 [SillyTavern-CustomModels](https://github.com/LenAnderson/SillyTavern-CustomModels) 插件
+---
+### Gemini: 回复内容重复
+现象：
+- 在同一轮中多次生成回复时，内容重复或高度相似。
+- 在新的对话轮次中，重复上一轮对话的内容。
+原因：
+1.  回复内容被API缓存。
+2.  上下文过长，超出了LLM的能力范围。
+方法：
+- 针对API缓存：
+    - 在预设中开启“防缓存条目”（或类似的防429随机数功能）。
+    - 尝试使用左下角功能栏的“重新生成”功能。
+    - 如果有多个API Key，可以尝试更换一个。
+- 针对上下文过长：
+    - 更换模型（例如，若正在使用`gemini-flash`系列，可以尝试更换为`gemini-pro`）。
+    - 对上文内容进行总结，并隐藏已总结的对话楼层。
+---
+Q：如何为Gemini API创建新的Google Cloud项目?
+A：
+1.  访问 Google Cloud Console (`https://console.cloud.google.com/`)。
+2.  点击网页左上角的“选择项目”，在弹出的窗口中点击右上角的“新建项目”，然后完成创建。
+3.  回到 Google AI Studio 的 API密钥页面 (`https://aistudio.google.com/apikey`)。
+4.  点击右上角的“创建API密钥”，在弹出窗口中选择刚刚新建的项目，然后点击“在现有项目中创建 API密钥”。
+备注：
+- 使用多个项目会增加谷歌账号被风控或封号的风险，强烈建议使用备用账号进行此操作。
+- 新建的项目可能需要等待2-3分钟才能在列表中显示，这属于正常现象。
+---
+### Gemini: `400 Bad Request: API key not valid`
+现象：
+错误代码为 `400 Bad Request`，终端提示 `API key not valid`。
+原因：
+API Key 无效，可能是复制时出错，或者该 Key 已被 Google 禁用。
+解决：
+- 检查Key： 仔细检查复制的 API Key 是否完整正确。
+- 更换Key： 如果确认 Key 没有复制错，说明该 Key 已被禁用，请重新生成一个 Key 来替换。
+备注：
+更换 Key 之后，需要重新点击API连接设置中的“连接”按钮，以使新 Key 生效。
+---
+### Gemini: 报错 `400 Bad Request: API key expired`
+现象：
+错误代码为 `400 Bad Request`，终端提示 `API key expired. Please renew the API key`。
+原因：
+使用的 API Key 已经过期。
+解决：
+前往 Google AI Studio 重新创建一个新的 API Key 来替换已过期的 Key。
+---
+### Gemini: 回复中出现标点符号、外文或词语“增殖”
+现象：
+Gemini 的回复中出现大量不正常的、重复的标点符号（如逗号、省略号）、外文或某个特定词语，而且越来越多。
+原因：不明。
+解决：回退到首次出现此问题的对话楼层，删除该楼层及其之后的所有内容，然后进行一次大总结（可选，方法见'总结方法'），最后重新生成回复。
+备注：
+- 如果选择进行总结，检查总结内容本身是否也被“增殖”污染，必要时手动修改。
+---
+### Gemini: 异常429
+现象: 发送消息后立刻显示'配额不足'('you exceed your current quota')的429报错信息，但未返回任何具体的配额信息，同时在Google Cloud查看API所属项目，状态变为不可用('unavailable')。
+原因: 不明。
+解决: 目前无明确解决方法，只能等待此现象消失，或者更换其他渠道的Gemini来使用。Build或Cli渠道的Gemini少见此问题。相关教程：[CLI 部署教程](https://discord.com/channels/1134557553011998840/1405524233823457300/1405524233823457300)/[Build 本地部署教程](https://discord.com/channels/1134557553011998840/1408675529393176608/1408675529393176608)/[Build云端部署教程](https://discord.com/channels/1134557553011998840/1385530169967771658/1385530169967771658)
+===
+## Claude
+### Claude: 403
+现象: 使用Claude，终端有关键词 403 Forbidden/unable to serve your request/unexpected end of JSON input
+原因: 
+- Anthropic加大网络环境审查力度
+- 梯子节点质量不达标
+解决:
+- 更换节点: 更换梯子节点或梯子(以美国为佳，可通过各种IP检测网站自查IP纯净度)
+- 更换预设: 更换SillyTavern中的'预设'后，部分情况可继续使用
+- 等待: 若方法均失效，则只能够等待审查波动结束
+### Claude: 413
+现象: 使用Claude, 终端有关键词 413 Prompt is too long/Payload too large
+原因: （Cookie渠道）输入提示词的长度超过上限
+解决: 总结并隐藏前文
+### Claude: 429
+现象: 使用Claude, 终端有关键词 429 Too many requests
+原因：Cookie额度已耗尽
+解决：更换一个cookie，或者等待配额刷新（每5小时刷新一次）
+===
+## DeepSeek
+### DeepSeek: 模型对应问题
+Q: SillyTavern中的deepseek-chat和deepseek-reasoner分别对应哪个模型？选哪个更好？
+A: 
+- 目前(截止2025年9月5日)，这两个对应的都是DeepSeek V3.1模型，选择chat会不开启模型的思维链，而reasoner会启用思维链。
+- 请按照预设作者的要求，选择对应的模型。
+### DeepSeek: 敏感词
+现象: 终端报错信息中有'sensitive words detected'或类似内容
+原因: 输入的提示词中含有敏感词
+解决: 修改输入提示词
+---
+## 各LLM通用
+### 参数超限
+现象: 
+- 终端报错信息中有此类内容:
+  - (参数名): Must be less than or equal to XXXX ; 例如max_ tokens: Must be less than or equal to 8192
+  - Invalid (参数名) value, the valid range of (参数名) is [范围] ; 例如Invalid max_tokens value, the valid range of max_tokens is [1, 8192]
+  - Unable to submit request because it has a (参数名) value of (当前值) but the supported range is (范围)
+原因: API不接受超出范围的参数
+解决: 按照提示，将SillyTavern'预设'中的此项参数调整到API可接受的范围内即可。特别注意提示中'exclusive' 'inclusive'之类的词。
+===
+## Cli反代问题对照表
+### Cli反代 基础信息:
+Cli反代（geminicli2api）是由类脑社区用户Qi开发的，基于 FastAPI 的代理服务器，可将 Gemini CLI 工具转换为兼容 OpenAI 和原生 Gemini API 的端点。
+相比于直接使用Google AI Studio API，Cli反代的好处包括:
+- 支持1百万token的上下文长度 (AI Studio API的免费用户只有125k)
+- 审查较少
+- 503，500等与谷歌有关的报错较少
+- 额度极高(每天1500条消息左右)
+Cli反代需要用户提供JSON格式的凭证文件来使用，而不是API Key.
+通过Cli反代使用Gemini时，Pro系列模型可以选择Gemini 2.5 Pro或Gemini 2.5 Pro Preview，但实际使用的模型都是Gemini 2.5 Pro。
+如果提问者明确声明自己正在使用Cli反代，用以下信息回答，而不是其他部分中有着类似'现象'的解决方法。
+---
+### Cli反代 报错对照:
+现象：Cli 报错400 'precondition check failed'
+原因：当前使用的凭证文件无效，可能是未在Google Cloud启用必需的API，或者启用后没有成功同步。
+解决：再次检查是否正确启用报错信息中提示的API，或通过本地部署谷歌的CLI服务来验证账号，都不行的话需要更换谷歌账号
+备注：本地部署CLI服务验证步骤如下
+1. `npx https://github.com/google-gemini/gemini-cli`
+2. 选择选项 1 并按回车确认
+3. 完成浏览器中的 Google 账户认证，系统将自动完成授权
+---
+现象：Cli 报错400 'unable to submit request because it has a topK value of xxx but the supported range is from 1(inclusive) to 65 (exclusive)'
+原因：请求中包含的topK参数太高
+解决：在SillyTavern的'预设'或其他前端中，将'topK'调整到64或更低
+---
+现象：Cli 报错500 'Internal Server Error'
+原因：一个较为常见的报错，通常是网络问题
+解决：更换代理软件的节点设置，开启的TUN模式（虚拟网卡模式）
+---
+现象：Cli 报错429 'Resource has been exhausted (e.g. check quota)'
+原因：Cli凭证被标记或者被速率限制
+解决：重试几次;切换模型，在无后缀，05-06, 06-05之间来回切换（仅Cli反代的429问题可能可以这样解决）
+---
+现象：Cli 报错403 'Forbidden'
+原因：账号验证失败，可能是已被封禁或者未在Google Cloud启用必需的API
+解决：同报错代码400
+---
+现象: Cli 报错401 'unauthorized'
+原因: 很可能是账号被谷歌风控导致
+解决: 登录账号查看是否被要求启用两步验证，若无法启用则只能更换账号
+---
+### 其他问题
+Q: 怎么在本地或服务器部署Cli反代？
+A: 
+1. Windows:
+初始安装：在PowerShell中执行`iex (iwr "https://raw.githubusercontent.com/su-kaka/gcli2api/refs/heads/master/install.ps1" -UseBasicParsing).Content`
+备选安装方案: `git clone https://github.com/su-kaka/gcli2api`
+若安装后，想要再次启动服务，只需使用start.bat，会自动更新并启动
+2. Termux:
+在termux中执行`curl -o termux-install.sh "https://raw.githubusercontent.com/su-kaka/gcli2api/refs/heads/master/termux-install.sh" && chmod +x termux-install.sh && ./termux-install.sh`
+安装后想要再次启动，请依次执行：
+```
+cd gcli2api
+bash termux-start.sh
+```
+3. Linux
+初始安装：`curl -o install.sh "https://raw.githubusercontent.com/su-kaka/gcli2api/refs/heads/master/install.sh" && chmod +x install.sh && ./install.sh`
+安装后想要再次启动，请依次执行:
+```
+cd gcli2api
+bash start.sh
+```
+4. Docker
+```
+# 使用通用密码
+docker run -d --name gcli2api --network host -e PASSWORD=pwd -e PORT=7861 -v $(pwd)/data/creds:/app/creds ghcr.io/su-kaka/gcli2api:latest
+# 使用分离密码
+docker run -d --name gcli2api --network host -e API_PASSWORD=api_pwd -e PANEL_PASSWORD=panel_pwd -e PORT=7861 -v $(pwd)/data/creds:/app/creds ghcr.io/su-kaka/gcli2api:latest
+```
+---
+Q: Cli反代应该怎么使用？在前端中使用什么端口？
+A:
+OpenAI 兼容客户端：
+  端点地址：http://127.0.0.1:7861/v1
+  API 密钥：pwd（默认值，可通过 API_PASSWORD 或 PASSWORD 环境变量修改）
+Gemini 原生客户端：
+    端点地址：http://127.0.0.1:7861
+    认证方式：
+        Authorization: Bearer your_api_password
+        x-goog-api-key: your_api_password
+        URL 参数：?key=your_api_password
+---
+### Cli反代注意事项
+1.  OAuth 验证流程仅支持本地主机（localhost）访问，即须通过 http://127.0.0.1:7861/auth 完成认证（默认端口 7861，可通过 PORT 环境变量修改）。
+2. 如需在云服务器或其他远程环境部署，请先在本地运行服务并完成 OAuth 验证，获得生成的 json 凭证文件（位于 ./geminicli/creds 目录）后，再在auth面板将该文件上传即可。
+===
+## Build反代问题对照表
+### 基础信息:
+Build反代(也叫AI Studio反代)是将Gemini格式请求转发到Google AI Studio的网页端，从而像使用API一样使用网页端Gemini的工具。
+相比于直接使用Google AI Studio API，Build反代的好处包括:
+- 支持1百万token的上下文长度
+- 503，500等与谷歌有关的报错较少
+- 额度较高(每天100-300条消息左右)
+- 即使GCP被封，只要谷歌账号能访问Google AI Studio的Build页面，就可以使用此反代，Pro系列模型只能选择gemini-2.5-pro。
+Build反代的报错信息可能在SillyTavern终端，本地反代服务器终端，AI Studio Build页面等地方出现。
+AI Studio Build页面分为左半边和右半边，左半边用于粘贴反代浏览器端的js代码，右半边会显示日志。
+如果提问者明确声明自己正在使用Build反代，用以下信息回答，而不是其他部分中有着类似'现象'的解决方法。
+使用期间需保持build网页和build后台在同一个设备上（比如手机部署就build后台和build网页都在手机上打开，电脑就都在电脑上打开）并且没有被系统限制活动
+---
+### Build 报错对照:
+
+现象: Build页面报错代码提及404
+原因: 选错模型
+解决: 报错一般都是没有选对模型，Build反代2.5pro系列只能用gemini-2.5-pro。
+---
+现象: Build页面报错代码提及403 'permission denied'
+原因: 原因不明的概率问题
+解决: 
+- 尝试刷新build页面
+- 更换梯子节点
+- 清浏览器缓存
+- 更换浏览器（推荐chrome）
+---
+现象: Build 一直出现500 'internal server error'
+原因: 网络问题
+解决: 
+- 确保梯子是稳定连接的
+- 尝试更换梯子节点
+- 把build网页和反代后台(本地反代服务器终端)同时重启一下
+---
+现象: Build 手机使用build反代，在网页左半边粘贴js代码后，右半边日志没有出现初始化等内容
+原因: 没有粘贴对
+解决: 仔细看教程，重新来一遍（注意是粘贴.js文件的内容，而不是文件名字）
+---
+现象: Build 报错429, build网页提示已达到此模型的每日请求上限
+原因: 超出每日配额
+解决: 在build页面换一个谷歌账号
+---
+现象: build网页出现出现'流处理完成'，但使用Build反代作为API的前端等地方没有响应
+原因: 酒馆卡了，或者非流式响应的候选体为空内容
+解决: 
+- 检查酒馆前台是否正常
+- 后台是否有prohibited content的报错 
+---
+现象: Build 反代网页连接失败，后台(本地反代服务器终端)有Killed字样
+原因: 反代进程被终止
+解决: 使用`node dark-server.js`重新启动反代
+---
+现象: Build 安装build反代时提示'npm'不是内部或外部命令
+原因: Node.js未正确安装
+解决: 重新安装即可
+---
+现象: 进不去AI Studio，跳转到适用范围的帮助页面
+原因: IP不在AI Studio的支持范围内
+解决: 通过代理服务更换IP。注意更换后需要
+---
+### Build 杂项问题
+Q: 怎么在Windows系统中安装和使用Build反代？
+A:
+1. 从类脑社区的教程区下载`dark-server.js`和`dark-browser.js`
+2. 用编辑器打开(不是运行)`dark-browser.js`，复制文件的所有内容
+3. 浏览器打开网页 `https://aistudio.google.com/app/apps/bundled/blank?showPreview=true&showCode=true`，点击左边输入框上方的'Code'，把刚刚复制的东西Ctrl+V粘贴到左边输入框里 
+4. 不要关闭浏览器，此时网页右侧的Preview部分会反复出现'初始化失败'，'准备重连'等报错内容，这是正常的，无需理会
+5. 新建一个本地文件夹(路径不能有中文或特殊符号)，将第1步的dark-server.js放进去，随后在这个文件夹打开cmd或PowerShell，依次执行`npm init -y`，`npm install express`，`npm install ws`，`node dark-server.js`，终端出现'代理服务器系统启动完成'的提示即是启动完成。不要关闭代理服务器的终端！
+6. 在LLM前端应用中，使用如下配置: [API:聊天补全, 请求格式(聊天补全来源):Gemini/Google AI Studio, 自定义基础URL/代理服务器URL: http://127.0.0.1:8889/, 密钥: 随意(可留空)]。不要点击各种前端的测试API连接按钮，直接使用即可。
+7. 享受高性能Gemini API 代理服务!
+---
+Q: 怎么在安卓系统(Termux环境)中安装和使用Build反代？
+A:
+1. 前四步同Windows系统中的操作，但打开js文件可能需要使用'MT管理器'等工具。
+2. 使用MT管理器等工具，打开termux目录，将dark-server.js放入termux根目录。
+3. 打开termux，确保没有开启任何其他脚本，如果用了一键启动脚本请退出脚本再使用，如果使用了点开termux就启动的酒馆脚本，请从左往右滑动termux界面，或者长按，建一个new session，然后在termux里，依次执行:`npm init -y`,`npm install express`,`npm install ws`,`node dark-server.js`
+4. 如果需要使用termux启动SillyTavern, 按照第3步中的方法建一个new session，在其中启动.
+5. 在LLM前端应用中，使用如下配置: [API:聊天补全, 请求格式(聊天补全来源):Gemini/Google AI Studio, 自定义基础URL/代理服务器URL: http://127.0.0.1:8889/, 密钥: 随意(可留空)]。
+7. 享受高性能Gemini API 代理服务!
+===
+## SillyTavern 酒馆config.yaml释义
+```
+# -- DATA CONFIGURATION --
+# 用户数据的根存储目录
+dataRoot: ./data
+# -- SERVER CONFIGURATION --
+# 监听传入的连接
+listen: false
+# 监听特定地址，支持IPv4和IPv6
+listenAddress:
+  ipv4: 0.0.0.0
+  ipv6: '[::]'
+# 启用IPv6和/或IPv4协议。必须至少启用一个！
+# - 使用 "auto" 选项以自动检测支持情况
+# - 使用 true 或 false (不加引号) 来启用或禁用各个协议
+protocol:
+    ipv4: true
+    ipv6: false
+# DNS优先使用IPv6。如果你的网络服务提供商(ISP)对IPv6支持良好，可以开启此项
+dnsPreferIPv6: false
+# 自动运行时，在浏览器中打开的主机名。
+# - 使用 "auto" 让服务器自动决定
+# - 也可指定 'localhost' 或 'st.example.com' 等具体地址
+autorunHostname: "auto"
+# 服务器端口
+port: 8000
+# 覆盖自动运行时，在浏览器中使用的端口。
+# - 设为-1，则使用上方配置的服务器端口。
+# - 也可以指定一个端口来覆盖默认值。
+autorunPortOverride: -1
+# -- SSL options --
+ssl:
+  enabled: false
+  certPath: "./certs/cert.pem"
+  keyPath: "./certs/privkey.pem"
+# -- SECURITY CONFIGURATION --
+# 启用/禁用白名单模式
+whitelistMode: true
+# 白名单同时也会验证 X-Forwarded-For / X-Real-IP 头中的IP地址
+enableForwardedWhitelist: true
+# 允许访问的IP地址白名单
+whitelist:
+  - ::1
+  - 127.0.0.1
+# 自动将Docker主机和网关的IP加入白名单
+whitelistDockerHosts: true
+# 启用/禁用基本身份验证模式
+basicAuthMode: false
+# 基本身份验证的用户名和密码
+basicAuthUser:
+  username: "user"
+  password: "password"
+# 启用CORS跨域代理中间件
+enableCorsProxy: false
+# -- REQUEST PROXY CONFIGURATION --
+requestProxy:
+  # 启用代理后，所有向外的HTTP/HTTPS请求都将通过该代理发送。
+  enabled: false
+  # 代理服务器地址。支持的协议：http, https, socks, socks5, socks4, pac
+  url: "socks5://username:password@example.com:1080"
+  # 代理绕过列表。访问这些主机的请求将不经过代理。
+  bypass:
+    - localhost
+    - 127.0.0.1
+# 启用多用户模式
+enableUserAccounts: false
+# 启用精简登录模式：在登录界面隐藏用户列表
+enableDiscreetLogin: false
+
+# 用户会话超时时间（单位：秒，默认为24小时）。
+## 设为正数：在无活动一段时间后，会话将过期。
+## 设为0：关闭浏览器后，会话即过期。
+## 设为负数：禁用会话过期。
+sessionTimeout: -1
+# 禁用CSRF保护 - 不推荐这样做
+disableCsrfProtection: false
+# 禁用启动时的安全检查 - 不推荐这样做
+securityOverride: false
+# -- LOGGING CONFIGURATION --
+logging:
+  # 启用访问日志，记录到 access.log 文件中
+  # 日志内容包含时间戳、IP地址和用户代理(User Agent)信息
+  enableAccessLog: true
+  # 在终端中显示的最低日志级别（DEBUG = 0, INFO = 1, WARN = 2, ERROR = 3）
+  minLogLevel: 0
+# -- RATE LIMITING CONFIGURATION --
+rateLimiting:
+  # 在进行速率限制时，使用 X-Real-IP 头代替源IP地址。
+  # 仅当您使用了正确配置的反向代理（如 Nginx/Traefik/Caddy）时才应启用此项。
+  preferRealIpHeader: false
+# -- ADVANCED CONFIGURATION --
+# 启动后自动在浏览器中打开
+autorun: true
+# 在“自动”模式下，避免使用 'localhost' 来进行自动运行。
+# 如果你的 hosts 文件中没有 'localhost' 记录，请启用此项。
+avoidLocalhost: false
+
+## BACKUP CONFIGURATION
+backups:
+  # 所有备份类型的通用设置
+  common:
+    # 每个聊天和设置文件要保留的备份数量
+    numberOfBackups: 50
+  chat:
+    # 启用自动聊天备份
+    enabled: true
+    # 保存前校验聊天文件的完整性
+    checkIntegrity: true
+    # 每个用户最多保留的聊天备份数（从最新的开始计算）。设为-1表示保留所有备份。
+    maxTotalBackups: -1
+    # 对单个用户的聊天备份操作进行节流的时间间隔（单位：毫秒）。
+    throttleInterval: 10000
+
+# PERFORMANCE-RELATED CONFIGURATION
+performance:
+  # 启用角色卡懒加载。这可以改善在角色卡数量很多时的加载性能。
+  # 但可能与某些扩展程序存在兼容性问题。
+  lazyLoadCharacters: false
+  # 已解析的角色卡可占用的最大内存。设为0可禁用内存缓存。
+  memoryCacheCapacity: '100mb'
+  # 启用角色卡磁盘缓存。这可以改善在角色卡数量很多时的加载性能。
+  useDiskCache: true
+
+# 允许通过API接口暴露密钥
+allowKeysExposure: false
+# 跳过新默认内容的检查
+skipContentCheck: false
+# 可按需下载额外的模型分词器。
+# 禁用此项后，程序将回退使用本地已有的其他分词器。
+enableDownloadableTokenizers: true
+```
+===
+## SillyTavern 文件结构
+根目录
+    ├── data (主要数据存储处，备份这个文件夹即可)
+    │   └── 其他文件 (没什么用)
+    │   └── default-user (若使用了多用户模式，则可能为其他用户名)
+    │       └── backgrounds (酒馆背景图片)
+    │       └── backups (备份文件, 仅包括设置和聊天记录)
+    │       └── characters (角色卡文件)
+    │       └── chats (聊天记录文件)
+    │       └── extensions (第三方扩展程序)
+    │       └── OpenAI Settings (预设)
+    │       └── reasoning (推理自动解析设置)
+    │       └── user (用户角色信息)
+    │       └── worlds (世界书)
+    │       └── settings.json (用户设置和正则文件)
+    │       └── secrets.json (保存的密钥等)
+    │
+    ├── public (公共文件)
+    │   └── scripts
+    │       └── extensions
+    │           └── third-party (第三方扩展程序)
+    │
+    └── config.yaml (常用配置)
+    └── Start.bat (启动sillytavern)
+    └── UpdateAndStart.bat (更新并启动sillytavern)
+===
+## 酒馆杂项问题
+---
+Q: 怎么缝预设？/怎么自定义预设？
+A:
+1. 准备好要放进原本预设的提示词，复制到剪贴板。
+2. 打开SillyTavern的预设页面，向下滑，直到看到很多可以开关的预设条目。在这些条目的上方，有一个'提示词'的下拉选框，右边分别是'锁链'按钮，删除按钮，导入/导出，刷新和新增。
+3. 点击最右边的新增按钮，将你准备好的提示词放进去，取一个你喜欢的标题，然后点击编辑框右下角的保存按钮。这样就创建了一个新的预设条目。
+4. 在提示词的下拉选框中，找到你刚刚放进去的条目，选择它，然后点击选框右侧的锁链按钮。条目会被插入到整个提示词列表的顶端。
+5. 拖拽刚刚插入的提示词条目到合适的位置。例如，你新建了一个'文风'，就把它放到原本预设的'文风'部分里。
+6. 重要！做完所有操作后，回到整个预设页面最上方，点击预设名字旁边的保存按钮！否则所有修改都会消失。
+---
+现象: 酒馆终端崩溃，显示报错信息: JavaScript heap out of memory
+原因: 酒馆尝试使用的内存超过了最大分配给它的内存限额（在termux环境下似乎为1024Mb）
+解决方法:
+- 重点: 不要尝试通过删除资源、关闭美化等方式释放内存，因为问题根源不在这。
+- 方法1: 提高给酒馆分配的内存 (较为简单)
+  1. 使用nano，MT管理器等工具，打开酒馆目录，找到爆内存的报错信息中提示的启动文件(termux环境下通常是start.sh或install.sh)
+  2. 如果是`start.sh`，找到`node "server.js" "$@"`的代码行（应该在这个文件的最后几行），把node "server.js" "$@"那一行代码换了，换成`node --max-old-space-size=4096 "server.js" "$@"`, 其他的都不要动。保存文件并重启termux和酒馆即可
+  3. 如果是`install.sh`，找到`start_service "SillyTavern" "$ST_DIR" "node server.js`这一行(在295行左右)，换成`start_service "SillyTavern" "$ST_DIR" "node --max-old-space-size=4096 server.js"`， 其他的都不要动。保存文件并重启termux和酒馆即可
+- 方法2: 尝试禁用对过期项目的周期性检查，减少内存占用
+  注意1: 此方法涉及修改酒馆程序，若操作失误可能导致酒馆无法启动或异常崩溃，请谨慎尝试
+  注意2: 此修改在SillyTavern 1.13.5以后的版本上已经被预装，因此只有使用低于此版本酒馆的用户才可以尝试
+  1. 打开酒馆目录，找到src/users.js这个文件，搜索`ttl: false,`，在下一行(大约第514行)加入`expiredInterval: 0,` 保存文件。由于是JS所以缩进无所谓
+  2. 找到src/endpoints/characters.js这个文件，搜索`forgiveParseErrors: true,`在下一行(大约第111行)加入`expiredInterval: 0,`保存文件。
+  3. 重启酒馆，现在内存和cpu的峰值使用应该都降低了
+备注:
+对于termux环境使用一键安装脚本的用户，如果使用方法1, 需要在修改start.sh或install.sh前额外执行以下操作
+1. 打开termux，输入0退出脚本
+2. 输入`nano ~/.bashrc`，把里面那一串命令(curl -O ..../install.sh)全部删掉，替换成`bash install.sh`
+3. 依次点击`Ctrl + O`  `Enter`  `Ctrl + X` 保存并退出.bashrc的编辑页面
+---
+现象: 酒馆中出现红框报错'mandatory prompt exceeds the content size'
+原因: 当前聊天尝试发送的提示词长度超出了预设中设置的'上下文长度'
+解决: 将'预设'中的'上下文长度'调整到模型支持的上限。若还是不能解决，尝试刷新网页或重启酒馆。
+---
+现象: 酒馆中出现红框报错'Check the server connection andreload the page to prevent data loss',或者'ST Server cannot be reached Verify that the server is running and accessible'， 同时无法进行任何操作
+原因: 运行酒馆的浏览器与终端连接断开
+解决: 重启酒馆即可。在安卓使用termux运行酒馆时，必须保持后台（termux）不被系统限制活动，方法有'挂小窗'等
+---
+Q: 酒馆中出现红框报错'An unknown error occurred while counting tokens. Further information may be available in console'
+A: 先重启酒馆，还不行的话直接删除出现此问题的角色卡并重新导入
+---
+Q: 预设中那些参数和可以开关的条目都有什么用？
+A:
+- 上下文:  指当前发送给 AI 的所有信息总和，包括角色设定、世界书、聊天记录等。'上下文长度'指的就是当前上下文在AI看来有多长。
+- 上下文长度（以词符数计）:  决定 AI 的“记忆”容量。如果聊天记录太长，导致'上下文长度'的超过此数值，酒馆会自动不发送最早的聊天记录。
+    * 通常保持预设作者推荐的默认值即可。
+- 最大回复长度（以词符数计）:  设定 AI 单次回复的最大字数。
+    * 同样，建议使用预设作者给的默认值。
+- 流式传输:  开启后，AI 的回复会像打字一样逐字逐句显示，无需等待其全部生成完毕。
+    -  注意： 使用 AI Studio API 的 Gemini 模型时，必须关闭此功能。否则，实时审查机制非常容易导致回复在输出中途被截断。
+- 总词符数:  一个数字，显示在预设条目列表的上方，直观地告诉你：如果再发一条消息，需要使用多少上下文。
+    * 如果出现AI回复质量下降的问题，建议先检查总词符数。对于Gemini 2.5 Pro，100k已经很多了。
+    * 降低总词符数请看后文'总结'部分。
+- 头部:  预设最顶部的几个条目，多用于定义 AI 的核心角色身份，如“你是一个xxx...”。
+    * 一些API提供方（如谷歌）会'标记'预设的头部，当你发送的消息中包含被标记的预设头部时，可能会出现回复变慢，无法破限，甚至无限429报错等问题。
+    * 自行修改预设头部以避免上述问题，请看后文'修改预设头部'部分。
+- 防429:  在预设头部之前，一段包含随机宏的“乱码”。作用是绕过对头部的标记，有效果但不大。
+- 思维链:  要求 AI 在正式回复前，先进行“思考”，并输出思考过程。一般来说，预设会明确以'思维链开始' '思维链结束'两个条目标识思维链的范围。对正文影响较大。
+    * 如果角色卡有特殊要求，可按需修改或关闭思维链中的某部分。
+- 文风:  指导 AI 写作风格的条目，对正文影响巨大。
+- 禁词/反八股: 尝试阻止 AI 使用特定词汇或表达方式。效果不好是正常的。
+- 防绝望/黑化/阴谋论: 字面意思，避免 AI 让角色在剧情中轻易陷入负面情绪或极端思维。
+- 小COT/段前思考: 一种在正文段落间插入微型思维链的技巧，常用于精细调整文风或抗绝望。
+- 防抢话: 防止 AI 代替你（用户，User，主控）进行描述或做出决定。
+    -  重要： 启用此功能时，必须调低预设条目内的字数控制（不是滑条下面的那个最大回复长度（以词符数计））。
+- 反截断: 当你发现 AI 开始出现空回复时，再开启此功能。它可以帮助绕过审查，生成完整回复。
+    * 如果回复正常，请勿开启。生成反截断使用的'免责声明'会影响正文质量，且反截断越长，越复杂，影响就越大。如要开启反截断，请从简单的开始尝试，若还是空回，再开启更强的（但同时只能开一个）。
+- 小总结/摘要: 让 AI 在每次回复后，附加一段对本次内容的摘要。配合正则功能，可以让久远的聊天记录只发送摘要部分，极大节约上下文空间。
+    - 注意： 此功能只对开启后新生成的回复生效，且必须与对应的正则功能一同开启或关闭。
+- 字数控制: 要求 AI 的回复达到或不超过特定字数。由于 AI 并不真的知道自己写了多少字（不会数数），要求不可能被严格遵守，要求字数超高或超低时更是如此。
+- 总结前文: 也称"大总结"，一般位于预设底部。开启后，它会命令 AI 暂停角色扮演，仅对之前的全部对话进行一次全面总结。
+- 底部: 位于预设最下方的几个条目。多用于卡思维链，重申用户输入，引导AI开始回复等。除非你知道自己在干什么，否则不要随意修改这部分。
+    * 卡思维链: 让AI以为模型自带的思考已经结束了，以立刻开始以预设思维链进行思考（或者干脆不思考）。
+---
+Q: 在SillyTavern中，如何正确地总结之前的聊天记录？
+A:
+1.  手动总结：
+    - 使用 `/hide` 命令隐藏大部分聊天记录（如 `/hide 0-100` 隐藏前100条）。
+    - 使用 `/unhide` 命令分段显示记录（如 `/unhide 0-50`），然后让 AI 对显示部分进行总结。
+      - 若预设中有'大总结'或'总结前文'条目，将其打开，然后发送指令：“<Request:暂停剧情，本回合无需输出正文内容。请将之前发生的事进行总结，按时间或逻辑顺序保留关键信息，省略冗余描述>”
+      - 若没有，直接发送指令即可。
+    - 将 AI 生成的总结内容保存到世界书中。
+      - 建议的条目设置为: 触发方式为'蓝灯'（总结内容将在每次生成中都被发送），位置为'@D ⚙️'，深度填写9999. 记得打开此条目
+    - 重复此过程，直到所有聊天记录都已总结完毕，总结内容全部保存到上一步中创建的世界书条目中。
+    - 最后，隐藏所有前文，只保留最近的5-10条以维持文风。
+2.  调整上下文长度：如果不在乎丢失早期的对话记忆，可以直接在预设页面中将最大上下文长度限制为模型上限（如125000）。SillyTavern会自动去除最早的聊天记录以保持上下文长度不超过限制。
+---
+Q: 导入角色卡失败，提示'The file is likely invalid or corrupted'
+A: 
+1. 这说明图片中用于存放角色卡内容的元数据不存在，或被破坏了。原因可能有: 用户下载了错误的图片; 角色卡作者上传的文件被平台(如Discord)压缩等。
+2. 检查图片格式是否为png。若否，必须重新下载正确的文件，绝不能试图将其他格式的图片转换为png，因为它们的元数据已丢失。
+---
+Q: SillyTavern聊天记录丢失了，怎么找回？
+A:
+1. 前往路径：(部署SillyTavern的文件夹)\data\default-user\backups (如果在使用多用户模式，将default-user换成用户名)
+2. 将文件夹内的所有文件按“修改时间”倒序排列，观察文件大小变化。通常会发现有某一时刻文件大小突然变小，该“小文件”下方的“大文件” 即为丢失前的聊天记录。
+3. 复制找到的“大文件”，粘贴到：(部署SillyTavern的文件夹)\data\default-user\chats\(角色卡名) 文件夹下。
+   如果不确定粘贴位置，可跳过第三步，直接在酒馆内操作：点击聊天输入框左侧的三条横线,选择“管理聊天文件” → “导入聊天”,选择刚刚找到的聊天文件并导入
+---
+Q: 新安装的酒馆怎么调整初始设置？
+A:
+1. 将'API连接配置'（上方按钮中从左往右第二个）中的'API'改为'聊天补全'，'聊天补全来源'选择你想用的API(如DeepSeek等)
+2. 将'世界/知识书'(从左往右第四个)中的'全局世界信息/知识书激活设置'展开，扫描深度改为2,上下文百分比改为100,取消勾选'包括名称'和'匹配整个单词'
+3. 在'用户设置'(第五个)中，打开(勾选)AI回复计时器，显示消息楼层，显示消息词符数，在机器人消息中允许{{user}},在机器人消息中允许{{char}}；关闭(取消勾选)click to edit, 自动修复markdown, 禁止外部媒体, 在响应中显示标签；调整 要加载#条消息到一个比较低的值，推荐30以下
+---
+Q: 怎么安装SillyTavern扩展？
+A:
+1. 找到扩展作者给的GitHub链接(或其他类似平台的链接)
+2. 打开SillyTavern的扩展页面(上面一排按钮中，图标是三个箱子的那个)
+3. 点击'安装扩展'并填入GitHub链接
+4. 点击'为自己安装'
+---
+Q: '前端助手'或'酒馆助手'这个扩展怎么安装？
+A:  建议查询扩展作者给的完整文档，这里不仅有安装方法，也有很多安装/使用中常见问题的解决方法: https://n0vi028.github.io/JS-Slash-Runner-Doc/
+---
+Q: '提示词模板'这个扩展怎么安装?
+A: 使用这个链接: https://github.com/zonde306/ST-Prompt-Template/
+---
+Q: AI回复的内容变成一大段五颜六色的代码，位于一个代码块中
+A:
+1. 检查是否安装'酒馆助手'扩展，或者其他 角色卡作者要求安装的扩展
+2. 若已安装，检查'渲染器'功能和'启用渲染优化'是否打开，若否，将其打开
+---
+Q: 怎么在现有角色卡中开启一个新聊天？
+A: 使用‘开始新聊天’按钮，这个按钮位于SillyTavern输入框左侧的'三条横线'菜单中。
+---
+Q: 怎么切换或删除聊天记录文件？
+A: 使用'管理聊天文件'按钮，这个按钮位于SillyTavern输入框左侧的'三条横线'菜单中。
+---
+Q: 怎么删除聊天记录中的消息?
+A: 使用'删除消息'按钮，这个按钮位于SillyTavern输入框左侧的'三条横线'菜单中。注意，这里只能从最后一条消息向上，连续地删除。
+---
+Q: 怎么重新生成AI的最后一次回答？
+A: 使用'重新生成'按钮，这个按钮位于SillyTavern输入框左侧的'三条横线'菜单中。注意，点击重新生成后，原本的消息会永久消失，无法恢复。如果你在用户设置中启用了'刷新回复按钮'，也可以点击它（位于整个聊天框的右下角，一个向右的箭头），这个按钮不会清除原本的消息。
+---
+Q: 怎么编辑聊天记录中已有的消息?
+A: 使用'小铅笔'按钮。这个按钮位于消息右上角，形状是一个铅笔。点击它，消息会变成一个包含内容的编辑框，编辑后点击绿色对号按钮即可保存。
+---
+Q: 怎么正确更新角色卡？
+A:
+1. 先点击角色卡界面的’绿色小地球’按钮，跳转到角色卡绑定的世界书
+2. 删除当前的世界书。 删除成功后，角色卡界面的绿色小地球会变成白色
+3. 然后，点击更多中的替换/更新，选择新版的角色卡文件。此时酒馆会导入新版的世界书
+4. 酒馆应该会自动将新版世界书绑定到角色卡上（表现为小地球变绿）。如果没有变绿，需要自行点击白色的小地球按钮，选择刚刚导入的世界书，自行绑定
+---
+问题: 酒馆变得很卡
+原因: 加载的消息过多/消息包含大量html等美化内容/正则处理的消息太多
+解决:
+1. 先重启酒馆（后台也要关掉重开），确认卡顿不是偶然问题
+2. 调低'用户设置'中的'要加载 # 条消息' 
+3. 使用去除前文消息的正则，屏蔽距当前太远的聊天记录（这个正则应该放在所有其他正则的上面）（请在类脑社区寻找具体的正则文件）
+4. 检查是否开了很多 多余的正则，关掉
+5. 如果用了'提示词模板'扩展，更新一下这个扩展，老版本的有性能问题
+6. 如果是有大量美化的角色卡变得很卡，调低'酒馆助手'扩展的'渲染器'中的渲染深度，建议调低至2
+---
+问题: 云酒馆突然开始无法保存聊天记录和设置
+原因: Nginx分发的酒馆，聊天记录在超过1024kb时会弹出这个报错，因为nginx默认配置文件只允许上传1m大小的文件
+解决:
+到酒馆分发的nginx配置文件，在server块加入：
+```
+client_max_body_size 10m;
+client_header_timeout 2m;
+client_body_timeout 2m;
+proxy_connect_timeout 2m;
+proxy_read_timeout 2m;
+proxy_send_timeout 2m;
+```
+然后nginx -t检查配置文件是否正确，无误后systemctl restart nginx 重启nginx服务
+---
+### SillyTavern酒馆的消息操作面板
+通过消息右侧的省略号（•••）按钮，可以对单条聊天消息进行管理
+---
+- 翻译： 将消息转换成另一种语言
+- 生成图片： 根据消息内容生成图片
+- 朗读： 将文本转换为语音
+- 指令（提示词）： 查看生成内容所用的指令（Prompt）及令牌用量
+---
+消息可见性
+- 包含： AI将可见此消息；点击可将其排除
+- 排除： AI将不会看到此消息；点击可将其包含
+---
+内容管理
+- 插入： 附带文件或图片
+- 存档点： 创建故事存档点
+- 存档点导航： 单击打开对应存档点的聊天；Shift+单击可更新现有存档点
+- 创建分支： 开启另一条故事走向
+- 复制： 复制消息文本内容
+- 编辑： 编辑消息内容
+===
+## Discord相关问题
+Q: 我想看的频道找不到了！
+A:
+1.  在频道列表最上方，点击“浏览频道”。
+2.  在弹出的列表中，找到你想看的频道，勾选它右侧的方框，它就会固定显示在你的频道列表里了。反之，取消勾选可以隐藏不常用的频道。
+3.  特别注意: `#深渊区` 和 `#R18G绘图` 等频道，需要先去深渊之门 频道领取特定身份组后才能看到。
+---
+Q: 为什么我不能在某些频道说话？
+A: 这是由于类脑的缓冲区机制。
+  - 新成员加入后有120小时的缓冲区。在此期间无法发言。
+  - 可以通过道馆挑战 ，从缓冲区变为高级缓冲区，可以在新人答疑区和开帖区发言，同时剩余缓冲区时长变为72小时。
+  - 缓冲计时结束后会获得已验证身份组，允许在绝大多数频道发言。
+  - 完成道馆挑战可立刻离开缓冲区，获得已验证身份组。
+---
+Q: 怎么回到帖子的最上面？（回顶）
+A:
+- 电脑桌面端：有直接回到顶部的按钮。
+- 手机APP：
+    - 在聊天框发送命令 `/回顶`，机器人会给你发送一个只有你能看到的返回顶部按钮，点击即可。
+    - 对最下面一条消息长按，选择'APP'，再点击'回到顶部'旁边的'发送'，同样可以得到回顶按钮。
+- 如果您还在缓冲区: 由于缓冲区无法在资源区发言，因此需要使用回顶区（答疑区的子区）
+---
+Q: 怎么搜索我想要的资源？
+A: 请使用搜索频道。这里的搜索功能比Discord自带的更好用。
+---
+Q: 怎么下载角色卡？
+A: 
+1. 在 Discord 类脑的频道列表中找到角色卡区，这里被分成了多个频道，点进去就能看到很多角色卡
+2. 卡的作者会指路哪一层的图片就是卡，下载这张图片的原图（应该是png格式）就可以导入酒馆了
+3. 下载原图的方法: 电脑桌面端:直接右键点击图片，选择保存图片； 手机APP点开大图长按，选择保存图片;  网页端: 必须点开大图后，选择右上角的’在浏览器中打开’，然后在新打开的页面中保存图片
+---
+Q: 怎么下载SillyTavern使用的预设？
+A:
+1. 打开discord社区的预设区
+2. 可以按标签筛选，选择自己玩的模型，挑自己喜欢的预设下载。每个预设风格都不同，可以都试试，找到最适合自己的
+3. 作者一般会给预设文件+正则文件（文件大小大的一般是预设，小的是正则）.全部下载下来
+4. 在酒馆中导入, 预设文件需要导入到预设（上面一排按钮最左边那个）里面, 正则文件需要导入到扩展-正则中.
+提醒: 预设必须和对应的正则配合使用，用哪个预设就开对应的正则，其他预设的正则要关掉; 调整开关正则时，务必在新对话中进行，由于酒馆BUG 开关正则可能导致当前聊天记录丢失
+---
+Q: 为什么'混沌区-档案馆'消失了？
+A: 由于社区前管理Echonion的误操作，整个‘混沌区-档案馆’频道被删除且无法直接恢复，'拟态复原区'是用备份数据重建的'混沌区-档案馆'，但一部分资源仍未能恢复。
+---
+## SillyTavern 正则 (regex) 功能
+正则是SillyTavern的默认拓展之一，作用是通过正则表达式寻找符部分，一旦满足就会立刻执行替换功能。
+### 配置项
+可以对正则设置以下配置项:
+- 脚本名称: 正则的名称，不影响运作
+- 查找正则表达式: 用于遍历文本中特定格式的查找表达式
+- 替换为: 用于替换捕获组中的字符，可以使用$1、$2等来代替指定的捕获组
+- 修剪掉: 用于修剪捕获组中的字符元素，例如捕获组为1234，如果写了1，那么最后的捕获组为234
+- 作用范围: 正则的作用域，可以多选以下项目:
+  - 用户输入(聊天记录中角色为user, 即用户输入给AI的内容)
+  - AI输出(聊天记录中角色为char, 即AI返回的内容)
+  - 快捷命令(使用酒馆斜杠命令插入到提示词的内容)
+  - 世界信息(世界书的内容。使用这个时必须勾选'仅格式提示词')
+  - 推理(AI返回的推理内容)
+- 其他选项: 
+  - 已禁用: 字面意思
+  - 在编辑时运行: 在消息被手动编辑后，勾选了此选项的正则会再次尝试查找和替换
+- 正则表达式查找时的宏: 在正则表达式的查找之前，是否将酒馆宏(如{{user}})替换为其他内容
+  - 不替换: 正则将完全忽略酒馆宏
+  - 替换(原始): 正则将把酒馆宏按原始形态(如{{user}})来查找和替换
+  - 替换(转义): 在每个字符之前添加一个正则表达式转义斜杠 \，以确保它们不会意外更改整个正则表达式序列
+- 短暂: 
+  - 仅格式显示: 正则将只改变用户看到的内容，不改变聊天记录中存放的，以及AI提示词中的内容。
+  - 仅格式提示词: 只改变提示词中的内容，不改变聊天记录中和用户看到的内容。
+  - 注意，两个'仅格式'都勾选时，正则会同时改变用户和AI看到的内容，但聊天记录文件不变；两个都不勾选时，正则将直接修改聊天记录文件
+- 深度:
+  - 最大深度: 正则只对该深度及以下的聊天记录'楼层'生效。
+  - 最小深度: 只对该深度及以上的楼层生效。
+  - 一条用户或AI消息为一个楼层，最靠近当前的(最'靠下')的为第1层，上方是第2层...这与楼层计数是相反的，后者将整个聊天记录的第一条消息作为第0层
+---

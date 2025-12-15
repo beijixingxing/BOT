@@ -196,12 +196,20 @@
         <div id="knowledge" class="tab-content">
           <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-800">知识库管理</h1>
-            <button
-              onclick="showKnowledgeModal()"
-              class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-            >
-              <i class="fas fa-plus mr-2"></i>添加知识
-            </button>
+            <div class="flex space-x-2">
+              <button
+                onclick="showImportModal()"
+                class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                <i class="fas fa-file-import mr-2"></i>批量导入
+              </button>
+              <button
+                onclick="showKnowledgeModal()"
+                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+              >
+                <i class="fas fa-plus mr-2"></i>添加知识
+              </button>
+            </div>
           </div>
           <div class="bg-white rounded-xl shadow-sm overflow-hidden">
             <table class="w-full">
@@ -556,6 +564,64 @@
               ></tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div
+      id="importModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white rounded-lg p-6 w-[700px] max-h-[80vh] overflow-y-auto"
+      >
+        <h2 class="text-xl font-bold mb-4">批量导入知识</h2>
+        <p class="text-sm text-gray-500 mb-3">
+          支持用 <code>===</code> 分隔大块，<code>---</code>
+          分隔小块，或每行一条
+        </p>
+        <textarea
+          id="importText"
+          placeholder="粘贴知识内容..."
+          rows="12"
+          class="w-full px-4 py-2 border rounded-lg mb-3 font-mono text-sm"
+        ></textarea>
+        <div class="flex items-center mb-4">
+          <label class="text-sm text-gray-700 mr-3">分隔符：</label>
+          <select id="importSeparator" class="px-3 py-1 border rounded">
+            <option value="===">===（大块）</option>
+            <option value="---">---（小块）</option>
+            <option value="\n\n">空行</option>
+            <option value="\n">每行一条</option>
+          </select>
+          <input
+            type="text"
+            id="importCategory"
+            placeholder="分类（可选）"
+            class="ml-3 px-3 py-1 border rounded flex-1"
+          />
+        </div>
+        <div id="importPreview" class="text-sm text-gray-500 mb-4"></div>
+        <div class="flex justify-end space-x-3">
+          <button
+            onclick="hideImportModal()"
+            class="px-4 py-2 border rounded-lg hover:bg-gray-100"
+          >
+            取消
+          </button>
+          <button
+            onclick="previewImport()"
+            class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+          >
+            预览
+          </button>
+          <button
+            onclick="doImport()"
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            导入
+          </button>
         </div>
       </div>
     </div>
@@ -1183,6 +1249,67 @@
       }
 
       // Modal functions
+      function showImportModal() {
+        document.getElementById("importText").value = "";
+        document.getElementById("importPreview").innerHTML = "";
+        document.getElementById("importModal").classList.remove("hidden");
+      }
+      function hideImportModal() {
+        document.getElementById("importModal").classList.add("hidden");
+      }
+
+      function previewImport() {
+        const text = document.getElementById("importText").value;
+        let sep = document.getElementById("importSeparator").value;
+        if (sep === "\\n\\n") sep = "\n\n";
+        if (sep === "\\n") sep = "\n";
+
+        const parts = text
+          .split(sep)
+          .map((p) => p.trim())
+          .filter((p) => p.length > 0);
+        document.getElementById(
+          "importPreview"
+        ).innerHTML = `将导入 <strong>${parts.length}</strong> 条知识`;
+      }
+
+      async function doImport() {
+        const text = document.getElementById("importText").value;
+        let sep = document.getElementById("importSeparator").value;
+        if (sep === "\\n\\n") sep = "\n\n";
+        if (sep === "\\n") sep = "\n";
+        const category = document.getElementById("importCategory").value;
+
+        const parts = text
+          .split(sep)
+          .map((p) => p.trim())
+          .filter((p) => p.length > 0);
+        if (parts.length === 0) {
+          alert("没有可导入的内容");
+          return;
+        }
+
+        let success = 0;
+        for (const part of parts) {
+          const lines = part.split("\n");
+          const title = lines[0].replace(/^#+\s*/, "").substring(0, 100);
+          const content = part;
+
+          try {
+            await api("/api/knowledge/", "POST", {
+              title: title || "导入知识",
+              content: content,
+              category: category || "导入",
+            });
+            success++;
+          } catch (e) {}
+        }
+
+        alert(`成功导入 ${success}/${parts.length} 条知识`);
+        hideImportModal();
+        loadKnowledge();
+      }
+
       function showKnowledgeModal() {
         document.getElementById("knowledgeModal").classList.remove("hidden");
       }
