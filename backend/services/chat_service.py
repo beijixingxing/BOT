@@ -285,16 +285,26 @@ class ChatService:
                     if hasattr(chunk.usage, 'completion_tokens'):
                         output_tokens = chunk.usage.completion_tokens
                 
-                if chunk.choices:
-                    delta = chunk.choices[0].delta
+                if chunk.choices and len(chunk.choices) > 0:
+                    choice = chunk.choices[0]
+                    delta = getattr(choice, 'delta', None)
                     content = None
                     
-                    # 标准content字段
-                    if hasattr(delta, 'content') and delta.content:
-                        content = delta.content
-                    # 某些API返回text字段
-                    elif hasattr(delta, 'text') and delta.text:
-                        content = delta.text
+                    if delta:
+                        # 标准content字段
+                        content = getattr(delta, 'content', None)
+                        # 某些API返回text字段
+                        if not content:
+                            content = getattr(delta, 'text', None)
+                    
+                    # 某些API直接在choice上返回text
+                    if not content:
+                        content = getattr(choice, 'text', None)
+                    
+                    # newapi/one-api可能返回message
+                    if not content and hasattr(choice, 'message'):
+                        msg = choice.message
+                        content = getattr(msg, 'content', None)
                     
                     if content:
                         full_response += content
