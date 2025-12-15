@@ -120,10 +120,18 @@ class MessageHandler(commands.Cog):
             
             role = "assistant" if msg.author == self.bot.user else "user"
             content = msg.content
-            if role == "user":
+            
+            if role == "assistant":
+                # 清理Bot回复中的统计信息
+                import re
+                content = re.sub(r'\n?-# Time:.*$', '', content, flags=re.MULTILINE)
+                content = re.sub(r'\n?`Time:.*$', '', content, flags=re.MULTILINE)
+            else:
+                # 用户消息加上用户名标识
                 content = f"[{msg.author.display_name}]: {content}"
             
-            messages.append({"role": role, "content": content})
+            if content.strip():
+                messages.append({"role": role, "content": content})
         
         return list(reversed(messages[1:]))
     
