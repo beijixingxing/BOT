@@ -191,6 +191,13 @@ class MessageHandler(commands.Cog):
                                 elif content.startswith("[ERROR]"):
                                     await reply_msg.edit(content=f"❌ 发生错误: {content[7:]}")
                                     return
+                                elif content.startswith("[STATS]"):
+                                    # 解析统计信息
+                                    stats_data = content[7:].split("|")
+                                    if len(stats_data) >= 2:
+                                        request_data["_input_tokens"] = int(stats_data[0]) if stats_data[0] else 0
+                                        request_data["_output_tokens"] = int(stats_data[1]) if stats_data[1] else 0
+                                    continue
                                 
                                 full_response += content
                                 
@@ -212,7 +219,9 @@ class MessageHandler(commands.Cog):
                     
                     # 计算统计信息（小字体格式）
                     elapsed = time.time() - start_time
-                    stats = f"\n-# Time: {elapsed:.1f}s"
+                    input_t = request_data.get("_input_tokens", 0)
+                    output_t = request_data.get("_output_tokens", 0)
+                    stats = f"\n-# Time: {elapsed:.1f}s | Input: {input_t}t | Output: {output_t}t"
                     
                     if len(full_response) > 2000 - len(stats):
                         chunks = [full_response[i:i+1950] for i in range(0, len(full_response), 1950)]

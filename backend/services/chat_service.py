@@ -253,7 +253,17 @@ class ChatService:
             
             stream = await client.chat.completions.create(**request_params)
             
+            input_tokens = 0
+            output_tokens = 0
+            
             async for chunk in stream:
+                # 获取usage信息
+                if hasattr(chunk, 'usage') and chunk.usage:
+                    if hasattr(chunk.usage, 'prompt_tokens'):
+                        input_tokens = chunk.usage.prompt_tokens
+                    if hasattr(chunk.usage, 'completion_tokens'):
+                        output_tokens = chunk.usage.completion_tokens
+                
                 if chunk.choices:
                     delta = chunk.choices[0].delta
                     content = None
@@ -268,6 +278,9 @@ class ChatService:
                     if content:
                         full_response += content
                         yield content
+            
+            # 发送统计信息
+            yield f"[STATS]{input_tokens}|{output_tokens}"
             
             print(f"[ChatService] Full response length: {len(full_response)}")
             if full_response:
