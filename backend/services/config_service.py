@@ -47,11 +47,12 @@ class ConfigService:
         await self.db.commit()
         return config
     
-    async def get_llm_config(self) -> Dict[str, str]:
+    async def get_llm_config(self) -> Dict[str, Any]:
         """获取通用LLM配置"""
         base_url = await self.get_system_config("llm_base_url")
         api_key = await self.get_system_config("llm_api_key")
         model = await self.get_system_config("llm_model")
+        stream = await self.get_system_config("llm_stream")
         
         from config import get_settings
         settings = get_settings()
@@ -59,10 +60,11 @@ class ConfigService:
         return {
             "base_url": base_url or settings.llm_base_url,
             "api_key": api_key or settings.llm_api_key,
-            "model": model or settings.llm_model
+            "model": model or settings.llm_model,
+            "stream": stream != "false"  # 默认为True
         }
     
-    async def set_llm_config(self, base_url: str = None, api_key: str = None, model: str = None):
+    async def set_llm_config(self, base_url: str = None, api_key: str = None, model: str = None, stream: bool = None):
         """设置通用LLM配置"""
         if base_url is not None:
             await self.set_system_config("llm_base_url", base_url, "LLM API地址")
@@ -70,6 +72,8 @@ class ConfigService:
             await self.set_system_config("llm_api_key", api_key, "LLM API密钥")
         if model is not None:
             await self.set_system_config("llm_model", model, "LLM模型名称")
+        if stream is not None:
+            await self.set_system_config("llm_stream", str(stream).lower(), "是否启用流式传输")
     
     # ============ Bot独立配置 (BotConfig) ============
     

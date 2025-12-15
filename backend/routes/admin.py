@@ -298,7 +298,8 @@ async def update_llm_config(
     await service.set_llm_config(
         base_url=request.base_url,
         api_key=request.api_key,
-        model=request.model
+        model=request.model,
+        stream=request.stream
     )
     return {"success": True}
 

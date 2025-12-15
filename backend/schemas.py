@@ -210,9 +210,11 @@ class LLMConfigUpdate(BaseModel):
     base_url: Optional[str] = None
     api_key: Optional[str] = None
     model: Optional[str] = None
+    stream: Optional[bool] = None
 
 
 class LLMConfigResponse(BaseModel):
     base_url: str
     api_key: str
     model: str
+    stream: bool = True

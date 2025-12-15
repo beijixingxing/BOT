@@ -422,6 +422,22 @@
                 </div>
                 <p id="modelStatus" class="text-sm text-gray-500 mt-1"></p>
               </div>
+              <div>
+                <label class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="llmStream"
+                    class="mr-2 w-4 h-4"
+                    checked
+                  />
+                  <span class="text-sm font-medium text-gray-700"
+                    >启用流式传输</span
+                  >
+                </label>
+                <p class="text-sm text-gray-500 mt-1">
+                  开启后Bot回复会实时显示，关闭则等待完整回复
+                </p>
+              </div>
               <button
                 onclick="saveLLMConfig()"
                 class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition"
@@ -1073,7 +1089,9 @@
           document.getElementById("llmApiKey").value = config.api_key
             ? "********"
             : "";
-          document.getElementById("llmModel").value = config.model || "";
+          document.getElementById("llmModelCustom").value = config.model || "";
+          document.getElementById("llmStream").checked =
+            config.stream !== false;
         } catch (e) {
           console.error(e);
         }
@@ -1084,10 +1102,12 @@
         const modelSelect = document.getElementById("llmModel").value;
         const modelCustom = document.getElementById("llmModelCustom").value;
         const model = modelCustom || modelSelect;
+        const stream = document.getElementById("llmStream").checked;
 
         const data = {
           base_url: document.getElementById("llmBaseUrl").value,
           model: model,
+          stream: stream,
         };
         if (apiKey && apiKey !== "********") {
           data.api_key = apiKey;
