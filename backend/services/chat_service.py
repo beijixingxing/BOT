@@ -187,7 +187,10 @@ class ChatService:
         if image_urls:
             print(f"[ChatService] Building message with {len(image_urls)} images")
             # 添加图片分析提示
-            image_prompt = "【用户发送了图片，请仔细观察图片中的所有文字、代码、错误信息等细节内容，准确理解后再回复】\n" + user_message
+            if user_message.strip():
+                image_prompt = f"【用户发送了图片】请仔细查看图片内容后回答。\n用户说：{user_message}"
+            else:
+                image_prompt = "【用户发送了图片但没有说话】请仔细查看图片中的所有内容（文字、代码、错误信息、截图等），理解图片内容后主动描述或回应。"
             content = [{"type": "text", "text": image_prompt}]
             for url in image_urls:
                 content.append({
