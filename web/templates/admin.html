@@ -100,6 +100,21 @@
           >
             <i class="fas fa-shield-alt mr-3"></i>敏感词
           </a>
+          <div class="border-t border-gray-700 my-4"></div>
+          <a
+            href="#"
+            onclick="showTab('llmconfig')"
+            class="sidebar-item flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 transition"
+          >
+            <i class="fas fa-cog mr-3"></i>API设置
+          </a>
+          <a
+            href="#"
+            onclick="showTab('botconfig')"
+            class="sidebar-item flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 transition"
+          >
+            <i class="fas fa-robot mr-3"></i>Bot设置
+          </a>
         </nav>
       </div>
 
@@ -354,6 +369,68 @@
           </div>
         </div>
 
+        <!-- LLM Config -->
+        <div id="llmconfig" class="tab-content">
+          <h1 class="text-3xl font-bold text-gray-800 mb-6">API设置</h1>
+          <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >API地址</label
+                >
+                <input
+                  type="text"
+                  id="llmBaseUrl"
+                  placeholder="https://api.openai.com/v1"
+                  class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >API密钥</label
+                >
+                <input
+                  type="password"
+                  id="llmApiKey"
+                  placeholder="sk-..."
+                  class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >模型名称</label
+                >
+                <input
+                  type="text"
+                  id="llmModel"
+                  placeholder="gpt-4o-mini"
+                  class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <button
+                onclick="saveLLMConfig()"
+                class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition"
+              >
+                <i class="fas fa-save mr-2"></i>保存
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bot Config -->
+        <div id="botconfig" class="tab-content">
+          <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Bot设置</h1>
+            <button
+              onclick="showBotConfigModal()"
+              class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+            >
+              <i class="fas fa-plus mr-2"></i>添加Bot
+            </button>
+          </div>
+          <div id="botConfigList" class="space-y-4"></div>
+        </div>
+
         <!-- Sensitive Words -->
         <div id="sensitive" class="tab-content">
           <div class="flex justify-between items-center mb-6">
@@ -545,6 +622,56 @@
             class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
             添加
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bot Config Modal -->
+    <div
+      id="botConfigModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-white rounded-lg p-6 w-[600px] max-h-[80vh] overflow-y-auto"
+      >
+        <h2 class="text-xl font-bold mb-4">Bot配置</h2>
+        <input
+          type="text"
+          id="bcBotId"
+          placeholder="Bot ID（如：default）"
+          class="w-full px-4 py-2 border rounded-lg mb-3"
+        />
+        <input
+          type="text"
+          id="bcBotName"
+          placeholder="Bot名称"
+          class="w-full px-4 py-2 border rounded-lg mb-3"
+        />
+        <textarea
+          id="bcSystemPrompt"
+          placeholder="人设（System Prompt）"
+          rows="8"
+          class="w-full px-4 py-2 border rounded-lg mb-3"
+        ></textarea>
+        <input
+          type="number"
+          id="bcContextLimit"
+          placeholder="上下文条数（默认10）"
+          class="w-full px-4 py-2 border rounded-lg mb-4"
+        />
+        <div class="flex justify-end space-x-3">
+          <button
+            onclick="hideBotConfigModal()"
+            class="px-4 py-2 border rounded-lg hover:bg-gray-100"
+          >
+            取消
+          </button>
+          <button
+            onclick="saveBotConfig()"
+            class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          >
+            保存
           </button>
         </div>
       </div>
@@ -922,6 +1049,181 @@
           loadSensitiveWords();
         }
       }
+
+      // LLM Config
+      async function loadLLMConfig() {
+        try {
+          const config = await api("/api/admin/llm-config");
+          document.getElementById("llmBaseUrl").value = config.base_url || "";
+          document.getElementById("llmApiKey").value = config.api_key
+            ? "********"
+            : "";
+          document.getElementById("llmModel").value = config.model || "";
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      async function saveLLMConfig() {
+        const apiKey = document.getElementById("llmApiKey").value;
+        const data = {
+          base_url: document.getElementById("llmBaseUrl").value,
+          model: document.getElementById("llmModel").value,
+        };
+        if (apiKey && apiKey !== "********") {
+          data.api_key = apiKey;
+        }
+        await api("/api/admin/llm-config", "PUT", data);
+        alert("保存成功！");
+      }
+
+      // Bot Config
+      async function loadBotConfigs() {
+        try {
+          const configs = await api("/api/admin/bot-config");
+          document.getElementById("botConfigList").innerHTML =
+            configs.length === 0
+              ? '<div class="bg-white rounded-xl p-6 shadow-sm text-gray-500">暂无Bot配置，点击右上角添加</div>'
+              : configs
+                  .map(
+                    (bc) => `
+              <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h3 class="text-lg font-bold text-gray-800">${
+                      bc.bot_name || bc.bot_id
+                    }</h3>
+                    <p class="text-sm text-gray-500">ID: ${bc.bot_id}</p>
+                  </div>
+                  <div class="flex space-x-2">
+                    <button onclick="editBotConfig('${
+                      bc.bot_id
+                    }')" class="text-indigo-600 hover:text-indigo-800">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="deleteBotConfig('${
+                      bc.bot_id
+                    }')" class="text-red-600 hover:text-red-800">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                  <div><span class="text-gray-500">上下文条数：</span>${
+                    bc.context_limit
+                  }</div>
+                  <div><span class="text-gray-500">状态：</span>${
+                    bc.is_active ? "启用" : "禁用"
+                  }</div>
+                </div>
+                <div class="mt-3 text-sm text-gray-600 truncate">
+                  <span class="text-gray-500">人设：</span>${(
+                    bc.system_prompt || ""
+                  ).substring(0, 100)}...
+                </div>
+              </div>
+            `
+                  )
+                  .join("");
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      let editingBotId = null;
+
+      function showBotConfigModal() {
+        editingBotId = null;
+        document.getElementById("bcBotId").value = "";
+        document.getElementById("bcBotId").disabled = false;
+        document.getElementById("bcBotName").value = "";
+        document.getElementById("bcSystemPrompt").value = "";
+        document.getElementById("bcContextLimit").value = "10";
+        document.getElementById("botConfigModal").classList.remove("hidden");
+      }
+
+      function hideBotConfigModal() {
+        document.getElementById("botConfigModal").classList.add("hidden");
+      }
+
+      async function editBotConfig(botId) {
+        editingBotId = botId;
+        const config = await api(`/api/admin/bot-config/${botId}`);
+        document.getElementById("bcBotId").value = config.bot_id;
+        document.getElementById("bcBotId").disabled = true;
+        document.getElementById("bcBotName").value = config.bot_name || "";
+        document.getElementById("bcSystemPrompt").value =
+          config.system_prompt || "";
+        document.getElementById("bcContextLimit").value =
+          config.context_limit || 10;
+        document.getElementById("botConfigModal").classList.remove("hidden");
+      }
+
+      async function saveBotConfig() {
+        const botId = editingBotId || document.getElementById("bcBotId").value;
+        const data = {
+          bot_id: botId,
+          bot_name: document.getElementById("bcBotName").value,
+          system_prompt: document.getElementById("bcSystemPrompt").value,
+          context_limit:
+            parseInt(document.getElementById("bcContextLimit").value) || 10,
+        };
+
+        if (editingBotId) {
+          await api(`/api/admin/bot-config/${botId}`, "PUT", data);
+        } else {
+          await api("/api/admin/bot-config", "POST", data);
+        }
+        hideBotConfigModal();
+        loadBotConfigs();
+      }
+
+      async function deleteBotConfig(botId) {
+        if (confirm("确定删除此Bot配置？")) {
+          await api(`/api/admin/bot-config/${botId}`, "DELETE");
+          loadBotConfigs();
+        }
+      }
+
+      // Update showTab to handle new tabs
+      const originalShowTab = showTab;
+      showTab = function (tabId) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".sidebar-item")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+        event.target.closest(".sidebar-item").classList.add("active");
+
+        switch (tabId) {
+          case "dashboard":
+            loadDashboard();
+            break;
+          case "knowledge":
+            loadKnowledge();
+            break;
+          case "blacklist":
+            loadBlacklist();
+            break;
+          case "channels":
+            loadChannels();
+            break;
+          case "memories":
+            loadMemories();
+            break;
+          case "sensitive":
+            loadSensitiveWords();
+            break;
+          case "llmconfig":
+            loadLLMConfig();
+            break;
+          case "botconfig":
+            loadBotConfigs();
+            break;
+        }
+      };
 
       // Enter key login
       document
