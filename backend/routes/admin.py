@@ -566,6 +566,12 @@ async def get_llm_models(
 
 
 # Knowledge Base Routes
+@router.get("/knowledge/rebuild-progress")
+async def get_rebuild_progress(_: bool = Depends(verify_admin)):
+    """获取向量重建进度"""
+    from backend.services.knowledge_service import rebuild_progress
+    return rebuild_progress
+
 @router.post("/knowledge/rebuild-embeddings")
 async def rebuild_knowledge_embeddings(
     db: AsyncSession = Depends(get_db),

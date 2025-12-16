@@ -6,6 +6,14 @@ import jieba
 import json
 from .embedding_service import EmbeddingService
 
+# 全局进度跟踪
+rebuild_progress = {
+    "running": False,
+    "current": 0,
+    "total": 0,
+    "message": ""
+}
+
 
 class KnowledgeService:
     def __init__(self, db: AsyncSession):
@@ -157,14 +165,23 @@ class KnowledgeService:
     
     async def rebuild_embeddings(self) -> int:
         """重建所有知识库条目的向量"""
+        global rebuild_progress
+        
         result = await self.db.execute(
             select(KnowledgeBase).where(KnowledgeBase.is_active == True)
         )
         all_kb = result.scalars().all()
         
+        rebuild_progress["running"] = True
+        rebuild_progress["current"] = 0
+        rebuild_progress["total"] = len(all_kb)
+        rebuild_progress["message"] = "正在初始化..."
+        
         embed_service = await self.get_embedding_service()
         count = 0
-        for kb in all_kb:
+        for i, kb in enumerate(all_kb):
+            rebuild_progress["current"] = i + 1
+            rebuild_progress["message"] = f"正在处理: {kb.title[:20]}..."
             try:
                 embed_text = f"{kb.title} {kb.content[:500]}"
                 embedding = await embed_service.embed(embed_text)
@@ -174,6 +191,8 @@ class KnowledgeService:
                 print(f"[KnowledgeService] Embed failed for {kb.id}: {e}")
         
         await self.db.commit()
+        rebuild_progress["running"] = False
+        rebuild_progress["message"] = "完成"
         return count
     
     async def get_all(self, skip: int = 0, limit: int = 100, active_only: bool = False):

@@ -3153,16 +3153,28 @@
       }
 
       // ========== Knowledge Vector Functions ==========
+      let rebuildProgressInterval = null;
+
       async function rebuildKnowledgeEmbeddings() {
         if (!confirm("确定要重建所有知识库的向量？这可能需要一些时间。"))
           return;
 
-        try {
-          const btn = event.target;
-          btn.disabled = true;
-          btn.innerHTML =
-            '<i class="fas fa-spinner fa-spin mr-2"></i>处理中...';
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerHTML =
+          '<i class="fas fa-spinner fa-spin mr-2"></i>处理中... (0/0)';
 
+        // 开始轮询进度
+        rebuildProgressInterval = setInterval(async () => {
+          try {
+            const progress = await api("/api/admin/knowledge/rebuild-progress");
+            if (progress.running) {
+              btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>处理中... (${progress.current}/${progress.total})`;
+            }
+          } catch (e) {}
+        }, 500);
+
+        try {
           const result = await api(
             "/api/admin/knowledge/rebuild-embeddings",
             "POST"
@@ -3172,9 +3184,9 @@
         } catch (e) {
           showToast("重建失败：" + e.message, "error");
         } finally {
-          event.target.disabled = false;
-          event.target.innerHTML =
-            '<i class="fas fa-sync-alt mr-2"></i>重建向量';
+          clearInterval(rebuildProgressInterval);
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-sync-alt mr-2"></i>重建向量';
         }
       }
 
