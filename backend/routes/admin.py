@@ -741,6 +741,8 @@ async def get_llm_pool(
     for i, m in enumerate(pool.get_pool()):
         key = m.get("api_key", "")
         masked_key = key[:8] + "****" + key[-4:] if len(key) > 12 else "****"
+        total = m.get("success_count", 0) + m.get("fail_count", 0)
+        success_rate = round(m.get("success_count", 0) / total * 100, 1) if total > 0 else 0
         models.append({
             "index": i,
             "name": m.get("name", ""),
@@ -748,14 +750,21 @@ async def get_llm_pool(
             "api_key": masked_key,
             "model": m.get("model", ""),
             "enabled": m.get("enabled", True),
-            "request_count": m.get("request_count", 0)
+            "weight": m.get("weight", 1),
+            "group": m.get("group", ""),
+            "request_count": m.get("request_count", 0),
+            "success_count": m.get("success_count", 0),
+            "fail_count": m.get("fail_count", 0),
+            "success_rate": success_rate,
+            "avg_response_time": m.get("avg_response_time", 0)
         })
     settings = pool.get_settings()
     return {
         "models": models, 
         "enabled_count": len(pool.get_enabled_models()),
         "retry_count": settings["retry_count"],
-        "retry_on_error": settings["retry_on_error"]
+        "retry_on_error": settings["retry_on_error"],
+        "groups": pool.get_groups()
     }
 
 
@@ -908,7 +917,9 @@ async def get_llm_model(
         "base_url": model.get("base_url", ""),
         "api_key": model.get("api_key", ""),
         "model": model.get("model", ""),
-        "enabled": model.get("enabled", True)
+        "enabled": model.get("enabled", True),
+        "weight": model.get("weight", 1),
+        "group": model.get("group", "")
     }
 
 
@@ -929,7 +940,9 @@ async def update_llm_in_pool(
         base_url=request.get("base_url"),
         api_key=request.get("api_key"),
         model=request.get("model"),
-        name=request.get("name")
+        name=request.get("name"),
+        weight=request.get("weight"),
+        group=request.get("group")
     )
     if not success:
         raise HTTPException(status_code=404, detail="Model not found")
@@ -997,3 +1010,64 @@ async def reset_llm_pool_counts(
     await pool.save_to_db(db)
     
     return {"success": True}
+
+
+@router.post("/llm-pool/reset-all-stats")
+async def reset_all_llm_stats(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """重置所有统计数据"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    pool.reset_all_stats()
+    await pool.save_to_db(db)
+    
+    return {"success": True}
+
+
+@router.get("/llm-pool/logs")
+async def get_llm_call_logs(
+    limit: int = 50,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取调用日志"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    return {"logs": pool.get_call_logs(limit)}
+
+
+@router.get("/llm-pool/groups")
+async def get_llm_groups(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取所有分组"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    return {"groups": pool.get_groups()}
+
+
+@router.get("/llm-pool/{index}/stats")
+async def get_llm_model_stats(
+    index: int,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取模型统计信息"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    stats = pool.get_model_stats(index)
+    if stats is None:
+        raise HTTPException(status_code=404, detail="Model not found")
+    
+    return stats

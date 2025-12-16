@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from openai import AsyncOpenAI
 from config import get_settings
+import time
 from .user_service import UserService
 from .memory_service import MemoryService
 from .knowledge_service import KnowledgeService
@@ -345,8 +346,11 @@ class ChatService:
         last_error = None
         
         for retry in range(max_retries):
+            start_time = time.time()
+            current_model = None
             try:
                 client, model, source = await self.get_client_and_model()
+                current_model = {"base_url": client.base_url, "model": model, "name": source}
                 full_response = ""
                 
                 # 获取流式开关（跟随主API设置）
@@ -426,6 +430,13 @@ class ChatService:
                     await self.memory_service.save_conversation(user.id, channel_id, "user", message)
                     await self.memory_service.save_conversation(user.id, channel_id, "assistant", full_response)
                 
+                # 记录成功调用
+                response_time = (time.time() - start_time) * 1000
+                pool.record_call_result(current_model, True, response_time)
+                if pool.needs_save():
+                    await pool.save_to_db(self.db)
+                    pool.mark_saved()
+                
                 # 成功，退出重试循环
                 return
                 
@@ -434,6 +445,11 @@ class ChatService:
                 last_error = str(e)
                 print(f"[ChatService] Attempt {retry+1} failed: {last_error}")
                 print(f"[ChatService] Traceback: {traceback.format_exc()}")
+                
+                # 记录失败调用
+                if current_model:
+                    response_time = (time.time() - start_time) * 1000
+                    pool.record_call_result(current_model, False, response_time, last_error)
                 
                 # 如果还有重试机会，继续尝试下一个模型
                 if retry < max_retries - 1:
