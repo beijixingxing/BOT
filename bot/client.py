@@ -688,3 +688,19 @@ class AdminCommands(commands.Cog):
             await interaction.response.send_message("❌ 没有权限删除该消息", ephemeral=True)
         except Exception as e:
             await interaction.response.send_message(f"❌ 删除失败: {e}", ephemeral=True)
+    
+    @app_commands.command(name="sync", description="同步斜杠命令到当前服务器（立即生效）")
+    async def sync_commands(self, interaction: discord.Interaction):
+        if not await self.is_admin(interaction):
+            await interaction.response.send_message("❌ 你没有权限执行此操作", ephemeral=True)
+            return
+        
+        await interaction.response.defer(ephemeral=True)
+        
+        try:
+            guild = interaction.guild
+            self.bot.tree.copy_global_to(guild=guild)
+            synced = await self.bot.tree.sync(guild=guild)
+            await interaction.followup.send(f"✅ 已同步 {len(synced)} 个命令到此服务器", ephemeral=True)
+        except Exception as e:
+            await interaction.followup.send(f"❌ 同步失败: {e}", ephemeral=True)
