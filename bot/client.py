@@ -26,13 +26,18 @@ class CatieBot(commands.Bot):
     async def setup_hook(self):
         await self.add_cog(MessageHandler(self))
         await self.add_cog(AdminCommands(self))
-        # 同步斜杠命令
-        synced = await self.tree.sync()
-        print(f"Synced {len(synced)} slash commands: {[c.name for c in synced]}", flush=True)
     
     async def on_ready(self):
         print(f"Logged in as {self.user} (ID: {self.user.id})", flush=True)
         print(f"Connected to {len(self.guilds)} guilds", flush=True)
+        
+        # 同步斜杠命令到每个服务器（立即生效）
+        for guild in self.guilds:
+            try:
+                synced = await self.tree.sync(guild=guild)
+                print(f"Synced {len(synced)} commands to {guild.name}", flush=True)
+            except Exception as e:
+                print(f"Failed to sync to {guild.name}: {e}", flush=True)
         await self.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.listening,
