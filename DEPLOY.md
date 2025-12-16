@@ -5,71 +5,65 @@
 ### 1. 准备工作
 
 1. 安装 1Panel 面板
-2. 在 1Panel 应用商店安装 **运行环境 → Python**
-3. 确保安装 Python 3.10+
+2. 在 1Panel 应用商店安装 **运行环境 → Python**（版本 3.10+）
 
 ### 2. 上传代码
 
 ```bash
-cd /opt
+cd /www/wwwroot
 git clone https://github.com/mzrodyu/BOT.git catiebot
-cd catiebot
 ```
 
-### 3. 创建配置文件
-
-```bash
-cp .env.example .env
-nano .env
-```
-
-填写以下内容：
-
-```env
-DISCORD_BOT_TOKEN=你的Discord机器人Token
-ADMIN_PASSWORD=你的后台密码
-LLM_API_KEY=你的LLM API密钥
-LLM_BASE_URL=https://api.openai.com/v1
-```
-
-### 4. 在 1Panel 创建 Python 项目
+### 3. 创建 Python 运行环境
 
 进入 **网站 → 运行环境 → Python**，点击 **创建运行环境**
 
 #### 后端项目（Backend）
 
-- **名称**: catiebot-backend
-- **运行目录**: `/opt/catiebot`
-- **版本**: Python 3.10+
-- **启动命令**: `python run_backend.py --port 8000`
-- **外部端口**: 8000
+| 配置项       | 值                                                                     |
+| ------------ | ---------------------------------------------------------------------- |
+| 名称         | catiebot-backend                                                       |
+| 项目目录     | `/www/wwwroot/catiebot`                                                |
+| 启动命令     | `pip install -r requirements.txt && python run_backend.py --port 8001` |
+| 外部映射端口 | 8001→8001                                                              |
+
+**环境变量**（在"环境变量"标签页添加）：
+
+| 变量名         | 值                          |
+| -------------- | --------------------------- |
+| ADMIN_PASSWORD | 你的后台密码                |
+| LLM_API_KEY    | 你的LLM API密钥             |
+| LLM_BASE_URL   | <https://api.openai.com/v1> |
 
 #### Bot项目
 
-- **名称**: catiebot-bot
-- **运行目录**: `/opt/catiebot`
-- **版本**: Python 3.10+
-- **启动命令**: `python run_bot.py`
+| 配置项   | 值                                                     |
+| -------- | ------------------------------------------------------ |
+| 名称     | catiebot-discord                                       |
+| 项目目录 | `/www/wwwroot/catiebot`                                |
+| 启动命令 | `pip install -r requirements.txt && python run_bot.py` |
 
-### 5. 安装依赖
+**环境变量**：
 
-在项目详情页点击 **安装依赖** 或命令行执行：
+| 变量名            | 值                        |
+| ----------------- | ------------------------- |
+| DISCORD_BOT_TOKEN | 你的Discord机器人Token    |
+| BACKEND_URL       | <http://127.0.0.1:8001>   |
+| BOT_ID            | 自定义Bot标识（如 mybot） |
+| ADMIN_PASSWORD    | 和后端相同的密码          |
 
-```bash
-cd /opt/catiebot
-pip install -r requirements.txt
-```
-
-### 6. 启动项目
-
-在 1Panel 中启动两个项目：
+### 4. 启动项目
 
 1. 先启动 `catiebot-backend`
-2. 再启动 `catiebot-bot`
+2. 再启动 `catiebot-discord`
 
-### 7. 访问后台
+### 5. 放行端口
 
-打开浏览器访问：`http://你的服务器IP:8000/admin`
+**主机 → 防火墙** 放行 8001 端口
+
+### 6. 访问后台
+
+打开浏览器访问：`http://你的服务器IP:8001/admin`
 
 ---
 
