@@ -53,16 +53,49 @@ class CatieBot(commands.Bot):
                 }
                 
                 for channel in guild.channels:
-                    # 文字频道、论坛、帖子
-                    if isinstance(channel, (discord.TextChannel, discord.ForumChannel, discord.Thread)):
+                    # 文字频道、论坛
+                    if isinstance(channel, discord.TextChannel):
                         channel_info = {
                             "channel_id": str(channel.id),
                             "channel_name": channel.name,
-                            "type": "text" if isinstance(channel, discord.TextChannel) else 
-                                   "forum" if isinstance(channel, discord.ForumChannel) else "thread",
-                            "parent_id": str(channel.parent_id) if hasattr(channel, 'parent_id') and channel.parent_id else None
+                            "type": "text",
+                            "parent_id": str(channel.category_id) if channel.category_id else None
                         }
                         guild_data["channels"].append(channel_info)
+                    elif isinstance(channel, discord.ForumChannel):
+                        channel_info = {
+                            "channel_id": str(channel.id),
+                            "channel_name": channel.name,
+                            "type": "forum",
+                            "parent_id": str(channel.category_id) if channel.category_id else None
+                        }
+                        guild_data["channels"].append(channel_info)
+                        
+                        # 获取Forum频道中的活跃帖子(threads)
+                        try:
+                            async for thread in channel.archived_threads(limit=50):
+                                thread_info = {
+                                    "channel_id": str(thread.id),
+                                    "channel_name": thread.name,
+                                    "type": "thread",
+                                    "parent_id": str(channel.id)
+                                }
+                                guild_data["channels"].append(thread_info)
+                        except:
+                            pass
+                
+                # 获取所有活跃的threads（包括Forum帖子）
+                for thread in guild.threads:
+                    # 检查是否已添加
+                    existing_ids = {ch["channel_id"] for ch in guild_data["channels"]}
+                    if str(thread.id) not in existing_ids:
+                        thread_info = {
+                            "channel_id": str(thread.id),
+                            "channel_name": thread.name,
+                            "type": "thread",
+                            "parent_id": str(thread.parent_id) if thread.parent_id else None
+                        }
+                        guild_data["channels"].append(thread_info)
                 
                 channels_data.append(guild_data)
             
