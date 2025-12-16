@@ -2520,10 +2520,11 @@
 
         try {
           // 使用当前输入框的值拉取模型
-          const params = new URLSearchParams({
-            base_url: baseUrl,
-            api_key: apiKey,
-          });
+          const params = new URLSearchParams({ base_url: baseUrl });
+          // 如果密钥不是占位符，才传递密钥
+          if (apiKey && apiKey !== "********") {
+            params.set("api_key", apiKey);
+          }
           const result = await api(`/api/admin/llm-models?${params}`);
           const select = document.getElementById("llmModel");
           select.innerHTML = '<option value="">请选择模型</option>';
