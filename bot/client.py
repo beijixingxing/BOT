@@ -561,3 +561,20 @@ class AdminCommands(commands.Cog):
                 await interaction.response.send_message("❌ 获取失败", ephemeral=True)
         except Exception as e:
             await interaction.response.send_message(f"❌ 错误: {e}", ephemeral=True)
+    
+    @app_commands.command(name="warn", description="警告用户（大字报）")
+    @app_commands.describe(user="要警告的用户")
+    async def warn_user(
+        self,
+        interaction: discord.Interaction,
+        user: discord.Member
+    ):
+        if not await self.is_admin(interaction):
+            await interaction.response.send_message("❌ 你没有权限执行此操作", ephemeral=True)
+            return
+        
+        warning_message = f"""# ⚠️ 警告 {user.mention}
+
+能别这么恶俗吗，把小头挂在自己大头的产物上很有趣吗？公开发表请至少遵守公序良俗。"""
+        
+        await interaction.response.send_message(warning_message)
