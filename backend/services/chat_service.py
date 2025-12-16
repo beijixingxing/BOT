@@ -333,8 +333,9 @@ class ChatService:
             username=username
         )
         
-        # 支持失败重试下一个模型
-        max_retries = 3
+        # 支持失败重试下一个模型（从配置读取重试次数）
+        pool = await LLMPoolService.get_instance()
+        max_retries = pool.retry_count if pool.retry_on_error else 1
         last_error = None
         
         for retry in range(max_retries):
