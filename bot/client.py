@@ -632,19 +632,23 @@ class AdminCommands(commands.Cog):
             await interaction.response.send_message(f"❌ 错误: {e}", ephemeral=True)
     
     @app_commands.command(name="warn", description="警告用户（大字报）")
-    @app_commands.describe(user="要警告的用户")
+    @app_commands.describe(user="要警告的用户", message="自定义警告内容（可选）")
     async def warn_user(
         self,
         interaction: discord.Interaction,
-        user: discord.Member
+        user: discord.Member,
+        message: str = None
     ):
         if not await self.is_admin(interaction):
             await interaction.response.send_message("❌ 你没有权限执行此操作", ephemeral=True)
             return
         
+        default_msg = "能别这么恶俗吗，把小头挂在自己大头的产物上很有趣吗？公开发表请至少遵守公序良俗。"
+        warning_content = message or default_msg
+        
         warning_message = f"""# ⚠️ 警告 {user.mention}
 
-能别这么恶俗吗，把小头挂在自己大头的产物上很有趣吗？公开发表请至少遵守公序良俗。"""
+{warning_content}"""
         
         await interaction.response.send_message(warning_message)
     
