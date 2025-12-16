@@ -7,6 +7,10 @@ from config import get_settings
 from typing import Optional, List
 
 settings = get_settings()
+# 确保 backend_url 没有尾部斜杠
+if settings.backend_url:
+    settings.backend_url = settings.backend_url.rstrip('/')
+print(f"[Config] backend_url={settings.backend_url}, bot_id={settings.bot_id}", flush=True)
 
 
 class CatieBot(commands.Bot):
