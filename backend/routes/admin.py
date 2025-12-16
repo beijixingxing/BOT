@@ -747,7 +747,8 @@ async def get_llm_pool(
             "base_url": m.get("base_url", ""),
             "api_key": masked_key,
             "model": m.get("model", ""),
-            "enabled": m.get("enabled", True)
+            "enabled": m.get("enabled", True),
+            "request_count": m.get("request_count", 0)
         })
     settings = pool.get_settings()
     return {
@@ -929,3 +930,19 @@ async def update_llm_pool_settings(
         "retry_count": pool.retry_count,
         "retry_on_error": pool.retry_on_error
     }
+
+
+@router.post("/llm-pool/reset-counts")
+async def reset_llm_pool_counts(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """重置所有模型的请求计数"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    pool.reset_request_counts()
+    await pool.save_to_db(db)
+    
+    return {"success": True}

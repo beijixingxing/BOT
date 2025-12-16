@@ -86,7 +86,8 @@ class LLMPoolService:
             "api_key": api_key,
             "model": model,
             "name": name or model,
-            "enabled": True
+            "enabled": True,
+            "request_count": 0
         })
     
     def remove_model(self, index: int) -> bool:
@@ -123,6 +124,11 @@ class LLMPoolService:
         self._current_index = self._current_index % len(enabled)
         model = enabled[self._current_index]
         self._current_index = (self._current_index + 1) % len(enabled)
+        
+        # 增加请求计数
+        if "request_count" not in model:
+            model["request_count"] = 0
+        model["request_count"] += 1
         
         return model
     
@@ -188,3 +194,8 @@ class LLMPoolService:
             self.retry_count = retry_count
         if retry_on_error is not None:
             self.retry_on_error = retry_on_error
+    
+    def reset_request_counts(self):
+        """重置所有模型的请求计数"""
+        for model in self._pool:
+            model["request_count"] = 0
