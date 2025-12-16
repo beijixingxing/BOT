@@ -26,8 +26,10 @@ class CatieBot(commands.Bot):
     async def setup_hook(self):
         await self.add_cog(MessageHandler(self))
         await self.add_cog(AdminCommands(self))
+        # 清除所有旧命令后重新同步
+        self.tree.clear_commands(guild=None)
         await self.tree.sync()
-        print(f"Synced slash commands")
+        print(f"Synced slash commands (cleared old commands)")
     
     async def on_ready(self):
         print(f"Logged in as {self.user} (ID: {self.user.id})")
