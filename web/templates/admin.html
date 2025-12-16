@@ -765,10 +765,48 @@
               <div id="poolStatus" class="text-sm"></div>
             </div>
             <div
-              class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700"
+              class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 mb-4"
             >
               <i class="fas fa-info-circle mr-2"></i>
               模型池为空时，将使用「API设置」中的默认配置
+            </div>
+            <!-- 重试设置 -->
+            <div class="border-t pt-4">
+              <h4 class="font-medium text-gray-800 mb-3">
+                <i class="fas fa-redo mr-2"></i>错误重试设置
+              </h4>
+              <div class="flex items-center space-x-6">
+                <label class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="poolRetryOnError"
+                    class="w-4 h-4 mr-2"
+                    checked
+                  />
+                  <span class="text-sm text-gray-700">启用错误重试</span>
+                </label>
+                <div class="flex items-center">
+                  <span class="text-sm text-gray-700 mr-2">重试次数:</span>
+                  <input
+                    type="number"
+                    id="poolRetryCount"
+                    min="1"
+                    max="10"
+                    value="3"
+                    class="w-16 px-2 py-1 border rounded text-center"
+                  />
+                  <span class="text-sm text-gray-500 ml-2">(1-10次)</span>
+                </div>
+                <button
+                  onclick="savePoolSettings()"
+                  class="bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-700 transition text-sm"
+                >
+                  <i class="fas fa-save mr-1"></i>保存设置
+                </button>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">
+                启用后，当某个模型调用失败时，会自动切换到池中的其他模型重试
+              </p>
             </div>
           </div>
           <div class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -2751,6 +2789,12 @@
           const data = await api("/api/admin/llm-pool");
           const models = data.models || [];
 
+          // 加载重试设置
+          document.getElementById("poolRetryOnError").checked =
+            data.retry_on_error !== false;
+          document.getElementById("poolRetryCount").value =
+            data.retry_count || 3;
+
           document.getElementById("poolStatus").innerHTML =
             models.length > 0
               ? `<span class="text-green-600"><i class="fas fa-check-circle mr-1"></i>已启用 ${data.enabled_count}/${models.length} 个模型</span>`
@@ -2863,6 +2907,23 @@
           }
         } catch (e) {
           showToast("测试失败：" + e.message, "error");
+        }
+      }
+
+      async function savePoolSettings() {
+        const retryOnError =
+          document.getElementById("poolRetryOnError").checked;
+        const retryCount =
+          parseInt(document.getElementById("poolRetryCount").value) || 3;
+
+        try {
+          await api("/api/admin/llm-pool/settings", "PUT", {
+            retry_on_error: retryOnError,
+            retry_count: retryCount,
+          });
+          showToast("重试设置已保存", "success");
+        } catch (e) {
+          showToast("保存失败：" + e.message, "error");
         }
       }
 

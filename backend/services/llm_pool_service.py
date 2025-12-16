@@ -17,6 +17,8 @@ class LLMPoolService:
         self._pool: List[Dict] = []  # [{base_url, api_key, model, name, enabled}]
         self._current_index = 0
         self._loaded = False
+        self._retry_count = 3  # 报错重试次数
+        self._retry_on_error = True  # 是否启用报错重试
     
     @classmethod
     async def get_instance(cls) -> "LLMPoolService":
@@ -36,9 +38,16 @@ class LLMPoolService:
         
         if config and config.value:
             try:
-                self._pool = json.loads(config.value)
+                data = json.loads(config.value)
+                # 支持新旧格式
+                if isinstance(data, list):
+                    self._pool = data
+                else:
+                    self._pool = data.get("models", [])
+                    self._retry_count = data.get("retry_count", 3)
+                    self._retry_on_error = data.get("retry_on_error", True)
                 self._loaded = True
-                print(f"[LLMPool] Loaded {len(self._pool)} models")
+                print(f"[LLMPool] Loaded {len(self._pool)} models, retry={self._retry_count}")
             except json.JSONDecodeError:
                 self._pool = []
         
@@ -51,12 +60,19 @@ class LLMPoolService:
         )
         config = result.scalar_one_or_none()
         
+        # 使用新格式保存，包含重试配置
+        data = {
+            "models": self._pool,
+            "retry_count": self._retry_count,
+            "retry_on_error": self._retry_on_error
+        }
+        
         if config:
-            config.value = json.dumps(self._pool, ensure_ascii=False)
+            config.value = json.dumps(data, ensure_ascii=False)
         else:
             config = SystemConfig(
                 key="llm_pool",
-                value=json.dumps(self._pool, ensure_ascii=False),
+                value=json.dumps(data, ensure_ascii=False),
                 description="LLM模型池配置"
             )
             db.add(config)
@@ -142,3 +158,33 @@ class LLMPoolService:
     @property
     def loaded(self) -> bool:
         return self._loaded
+    
+    @property
+    def retry_count(self) -> int:
+        return self._retry_count
+    
+    @retry_count.setter
+    def retry_count(self, value: int):
+        self._retry_count = max(1, min(10, value))  # 限制1-10次
+    
+    @property
+    def retry_on_error(self) -> bool:
+        return self._retry_on_error
+    
+    @retry_on_error.setter
+    def retry_on_error(self, value: bool):
+        self._retry_on_error = value
+    
+    def get_settings(self) -> Dict:
+        """获取模型池设置"""
+        return {
+            "retry_count": self._retry_count,
+            "retry_on_error": self._retry_on_error
+        }
+    
+    def update_settings(self, retry_count: int = None, retry_on_error: bool = None):
+        """更新模型池设置"""
+        if retry_count is not None:
+            self.retry_count = retry_count
+        if retry_on_error is not None:
+            self.retry_on_error = retry_on_error

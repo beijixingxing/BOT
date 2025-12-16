@@ -722,7 +722,13 @@ async def get_llm_pool(
             "model": m.get("model", ""),
             "enabled": m.get("enabled", True)
         })
-    return {"models": models, "enabled_count": len(pool.get_enabled_models())}
+    settings = pool.get_settings()
+    return {
+        "models": models, 
+        "enabled_count": len(pool.get_enabled_models()),
+        "retry_count": settings["retry_count"],
+        "retry_on_error": settings["retry_on_error"]
+    }
 
 
 @router.post("/llm-pool/test")
@@ -872,3 +878,27 @@ async def toggle_llm_in_pool(
     
     await pool.save_to_db(db)
     return {"success": True}
+
+
+@router.put("/llm-pool/settings")
+async def update_llm_pool_settings(
+    request: dict,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """更新模型池的重试设置"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    retry_count = request.get("retry_count")
+    retry_on_error = request.get("retry_on_error")
+    
+    pool.update_settings(retry_count=retry_count, retry_on_error=retry_on_error)
+    await pool.save_to_db(db)
+    
+    return {
+        "success": True,
+        "retry_count": pool.retry_count,
+        "retry_on_error": pool.retry_on_error
+    }
