@@ -144,6 +144,26 @@ class CatieBot(commands.Bot):
 class MessageHandler(commands.Cog):
     def __init__(self, bot: CatieBot):
         self.bot = bot
+        self._config_cache = {}
+        self._config_cache_time = 0
+    
+    async def get_bot_config(self) -> dict:
+        """获取Bot配置（带缓存，5分钟）"""
+        import time
+        if time.time() - self._config_cache_time < 300 and self._config_cache:
+            return self._config_cache
+        
+        try:
+            resp = await self.bot.http_client.get(
+                f"{BACKEND_URL}/api/admin/bot-config/{BOT_ID}",
+                headers={"X-Admin-Secret": ADMIN_PASSWORD}
+            )
+            if resp.status_code == 200:
+                self._config_cache = resp.json()
+                self._config_cache_time = time.time()
+        except Exception as e:
+            print(f"Error getting bot config: {e}")
+        return self._config_cache
     
     async def is_channel_allowed(self, channel_id: str) -> bool:
         try:
@@ -157,7 +177,15 @@ class MessageHandler(commands.Cog):
             return True
     
     async def should_respond(self, message: discord.Message) -> bool:
+        # 检查是否是机器人发送的消息
         if message.author.bot:
+            # 获取配置，检查是否允许响应其他机器人
+            config = await self.get_bot_config()
+            if not config.get("respond_to_bot", False):
+                return False
+            # 允许响应其他机器人时，只响应@提及
+            if self.bot.user.mentioned_in(message):
+                return True
             return False
         
         if self.bot.user.mentioned_in(message):

@@ -105,7 +105,8 @@ class ConfigService:
         context_limit: int = None,
         is_active: bool = None,
         admin_ids: str = None,
-        chat_mode: str = None
+        chat_mode: str = None,
+        respond_to_bot: bool = None
     ) -> BotConfig:
         config = await self.get_or_create_bot_config(bot_id)
         
@@ -121,6 +122,8 @@ class ConfigService:
             config.admin_ids = admin_ids
         if chat_mode is not None:
             config.chat_mode = chat_mode
+        if respond_to_bot is not None:
+            config.respond_to_bot = respond_to_bot
         
         await self.db.commit()
         await self.db.refresh(config)

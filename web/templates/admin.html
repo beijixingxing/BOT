@@ -1402,6 +1402,17 @@
             </label>
           </div>
         </div>
+        <div class="mb-4">
+          <label class="flex items-center cursor-pointer">
+            <input type="checkbox" id="bcRespondToBot" class="mr-2 w-4 h-4" />
+            <span class="text-sm font-medium text-gray-700"
+              >响应其他机器人的@</span
+            >
+            <span class="ml-2 text-xs text-gray-500"
+              >（开启后会响应其他Bot的@提及，可能导致机器人互相对话）</span
+            >
+          </label>
+        </div>
         <div class="flex justify-end space-x-3">
           <button
             onclick="hideBotConfigModal()"
@@ -2796,6 +2807,7 @@
         document.getElementById("bcContextLimit").value = "10";
         document.getElementById("bcAdminIds").value = "";
         document.getElementById("bcChatModeMulti").checked = true;
+        document.getElementById("bcRespondToBot").checked = false;
         document.getElementById("botConfigModal").classList.remove("hidden");
       }
 
@@ -2821,6 +2833,8 @@
         } else {
           document.getElementById("bcChatModeMulti").checked = true;
         }
+        document.getElementById("bcRespondToBot").checked =
+          config.respond_to_bot || false;
         document.getElementById("botConfigModal").classList.remove("hidden");
       }
 
@@ -2840,6 +2854,7 @@
             parseInt(document.getElementById("bcContextLimit").value) || 10,
           admin_ids: document.getElementById("bcAdminIds").value,
           chat_mode: chatMode,
+          respond_to_bot: document.getElementById("bcRespondToBot").checked,
         };
 
         if (editingBotId) {

@@ -128,6 +128,7 @@ class BotConfig(Base):
     context_limit = Column(Integer, default=10)  # 上下文条数
     admin_ids = Column(Text)  # 逗号分隔的管理员ID
     chat_mode = Column(String(20), default="multi")  # single=单用户, multi=多用户, qa=答疑
+    respond_to_bot = Column(Boolean, default=False)  # 是否响应其他机器人的@
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

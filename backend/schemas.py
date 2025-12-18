@@ -186,6 +186,7 @@ class BotConfigCreate(BaseModel):
     context_limit: Optional[int] = 10
     admin_ids: Optional[str] = None  # 逗号分隔的管理员ID
     chat_mode: Optional[str] = "chat"  # chat=聊天模式, qa=答疑模式
+    respond_to_bot: Optional[bool] = False  # 是否响应其他机器人的@
 
 
 class BotConfigUpdate(BaseModel):
@@ -195,6 +196,7 @@ class BotConfigUpdate(BaseModel):
     is_active: Optional[bool] = None
     admin_ids: Optional[str] = None  # 逗号分隔的管理员ID
     chat_mode: Optional[str] = None  # chat=聊天模式, qa=答疑模式
+    respond_to_bot: Optional[bool] = None  # 是否响应其他机器人的@
 
 
 class BotConfigResponse(BaseModel):
@@ -206,6 +208,7 @@ class BotConfigResponse(BaseModel):
     is_active: bool
     admin_ids: Optional[str] = None
     chat_mode: Optional[str] = "chat"
+    respond_to_bot: Optional[bool] = False  # 是否响应其他机器人的@
     created_at: datetime
     updated_at: datetime
     
