@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from database import init_db
-from backend.routes import chat_router, admin_router, knowledge_router
+from backend.routes import chat_router, admin_router, knowledge_router, public_api_router
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from database import AsyncSessionLocal
@@ -77,6 +77,7 @@ app.add_middleware(
 app.include_router(chat_router)
 app.include_router(admin_router)
 app.include_router(knowledge_router)
+app.include_router(public_api_router)
 
 templates_dir = os.path.join(os.path.dirname(__file__), "..", "web", "templates")
 static_dir = os.path.join(os.path.dirname(__file__), "..", "web", "static")

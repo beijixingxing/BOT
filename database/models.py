@@ -132,3 +132,36 @@ class BotConfig(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class PublicAPIConfig(Base):
+    """公益站配置"""
+    __tablename__ = "public_api_config"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    bot_id = Column(String(50), nullable=False, index=True)
+    name = Column(String(100), default="公益站")  # 站点名称
+    newapi_url = Column(String(500))  # NewAPI地址
+    newapi_token = Column(String(500))  # 管理员session/token
+    default_quota = Column(Integer, default=100000)  # 默认额度（美元*500000）
+    default_group = Column(String(50), default="default")  # 默认用户组
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class PublicAPIUser(Base):
+    """公益站用户注册记录"""
+    __tablename__ = "public_api_users"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    discord_id = Column(String(50), nullable=False, index=True)
+    discord_username = Column(String(100))
+    newapi_user_id = Column(Integer)  # NewAPI中的用户ID
+    newapi_username = Column(String(100))  # NewAPI用户名
+    api_key = Column(String(200))  # 分配的API Key
+    registered_at = Column(DateTime, default=datetime.utcnow)
+    
+    __table_args__ = (
+        Index("idx_public_api_discord", "discord_id", unique=True),
+    )

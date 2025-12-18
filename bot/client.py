@@ -35,6 +35,7 @@ class CatieBot(commands.Bot):
     async def setup_hook(self):
         await self.add_cog(MessageHandler(self))
         await self.add_cog(AdminCommands(self))
+        await self.add_cog(PublicAPICommands(self))
         # 全局同步斜杠命令
         try:
             synced = await self.tree.sync()
@@ -819,3 +820,144 @@ class AdminCommands(commands.Cog):
             await interaction.followup.send(f"✅ 已同步 {len(synced)} 个命令到此服务器", ephemeral=True)
         except Exception as e:
             await interaction.followup.send(f"❌ 同步失败: {e}", ephemeral=True)
+
+
+class PublicAPICommands(commands.Cog):
+    """公益站命令"""
+    
+    def __init__(self, bot: CatieBot):
+        self.bot = bot
+    
+    @app_commands.command(name="公益站", description="公益站 - 注册账号、查看用量")
+    @app_commands.describe(action="选择操作")
+    @app_commands.choices(action=[
+        app_commands.Choice(name="📝 注册账号", value="register"),
+        app_commands.Choice(name="📊 查看用量", value="usage"),
+        app_commands.Choice(name="🔑 查看密钥", value="key"),
+    ])
+    async def public_api(
+        self,
+        interaction: discord.Interaction,
+        action: app_commands.Choice[str]
+    ):
+        await interaction.response.defer(ephemeral=True)
+        
+        try:
+            if action.value == "register":
+                await self._handle_register(interaction)
+            elif action.value == "usage":
+                await self._handle_usage(interaction)
+            elif action.value == "key":
+                await self._handle_key(interaction)
+        except Exception as e:
+            await interaction.followup.send(f"❌ 发生错误: {e}", ephemeral=True)
+    
+    async def _handle_register(self, interaction: discord.Interaction):
+        """处理注册"""
+        try:
+            resp = await self.bot.http_client.post(
+                f"{BACKEND_URL}/api/public/register",
+                json={
+                    "bot_id": BOT_ID,
+                    "discord_id": str(interaction.user.id),
+                    "discord_username": interaction.user.display_name
+                }
+            )
+            
+            data = resp.json()
+            
+            if data.get("success"):
+                # 注册成功
+                embed = discord.Embed(
+                    title="✅ 注册成功",
+                    color=discord.Color.green()
+                )
+                embed.add_field(name="用户名", value=f"`{data.get('username')}`", inline=True)
+                embed.add_field(name="密码", value=f"||`{data.get('password')}`||", inline=True)
+                embed.add_field(name="API Key", value=f"||`{data.get('api_key', '生成中...')}`||", inline=False)
+                embed.set_footer(text="⚠️ 请妥善保存密码，此信息仅显示一次")
+                
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                error = data.get("error", "未知错误")
+                if "已经注册" in error:
+                    # 已注册，显示现有信息
+                    embed = discord.Embed(
+                        title="ℹ️ 您已注册",
+                        description="您之前已经注册过了",
+                        color=discord.Color.blue()
+                    )
+                    if data.get("username"):
+                        embed.add_field(name="用户名", value=f"`{data.get('username')}`", inline=True)
+                    if data.get("api_key"):
+                        embed.add_field(name="API Key", value=f"||`{data.get('api_key')}`||", inline=False)
+                    await interaction.followup.send(embed=embed, ephemeral=True)
+                else:
+                    await interaction.followup.send(f"❌ 注册失败: {error}", ephemeral=True)
+                    
+        except Exception as e:
+            await interaction.followup.send(f"❌ 请求失败: {e}", ephemeral=True)
+    
+    async def _handle_usage(self, interaction: discord.Interaction):
+        """处理查看用量"""
+        try:
+            resp = await self.bot.http_client.get(
+                f"{BACKEND_URL}/api/public/usage/{BOT_ID}/{interaction.user.id}"
+            )
+            
+            data = resp.json()
+            
+            if data.get("success"):
+                embed = discord.Embed(
+                    title="📊 用量统计",
+                    color=discord.Color.blue()
+                )
+                embed.add_field(name="用户名", value=f"`{data.get('username')}`", inline=True)
+                
+                # 格式化金额显示
+                quota = data.get("quota")
+                used = data.get("used")
+                remain = data.get("remain")
+                
+                if isinstance(quota, (int, float)):
+                    embed.add_field(name="总额度", value=f"${quota:.4f}", inline=True)
+                    embed.add_field(name="已使用", value=f"${used:.4f}", inline=True)
+                    embed.add_field(name="剩余", value=f"${remain:.4f}", inline=True)
+                else:
+                    embed.add_field(name="额度", value=str(quota), inline=True)
+                
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                error = data.get("error", "未知错误")
+                if "未注册" in error:
+                    await interaction.followup.send("❌ 您还未注册，请先使用 `/公益站 注册账号`", ephemeral=True)
+                else:
+                    await interaction.followup.send(f"❌ 查询失败: {error}", ephemeral=True)
+                    
+        except Exception as e:
+            await interaction.followup.send(f"❌ 请求失败: {e}", ephemeral=True)
+    
+    async def _handle_key(self, interaction: discord.Interaction):
+        """处理查看密钥"""
+        try:
+            resp = await self.bot.http_client.get(
+                f"{BACKEND_URL}/api/public/check/{BOT_ID}/{interaction.user.id}"
+            )
+            
+            data = resp.json()
+            
+            if data.get("registered"):
+                embed = discord.Embed(
+                    title="🔑 您的API密钥",
+                    color=discord.Color.gold()
+                )
+                embed.add_field(name="用户名", value=f"`{data.get('username')}`", inline=True)
+                embed.add_field(name="API Key", value=f"||`{data.get('api_key', '无')}`||", inline=False)
+                embed.set_footer(text="点击黑条查看密钥")
+                
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            else:
+                await interaction.followup.send("❌ 您还未注册，请先使用 `/公益站 注册账号`", ephemeral=True)
+                    
+        except Exception as e:
+            await interaction.followup.send(f"❌ 请求失败: {e}", ephemeral=True)
