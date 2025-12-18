@@ -830,6 +830,33 @@ async def add_llm_to_pool(
     return {"success": True, "count": len(pool.get_pool())}
 
 
+@router.get("/llm-pool/logs")
+async def get_llm_call_logs(
+    limit: int = 50,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取调用日志"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    return {"logs": pool.get_call_logs(limit)}
+
+
+@router.get("/llm-pool/groups")
+async def get_llm_groups(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_admin)
+):
+    """获取所有分组"""
+    pool = await LLMPoolService.get_instance()
+    if not pool.loaded:
+        await pool.load_from_db(db)
+    
+    return {"groups": pool.get_groups()}
+
+
 @router.delete("/llm-pool/{index}")
 async def remove_llm_from_pool(
     index: int,
@@ -1026,33 +1053,6 @@ async def reset_all_llm_stats(
     await pool.save_to_db(db)
     
     return {"success": True}
-
-
-@router.get("/llm-pool/logs")
-async def get_llm_call_logs(
-    limit: int = 50,
-    db: AsyncSession = Depends(get_db),
-    _: bool = Depends(verify_admin)
-):
-    """获取调用日志"""
-    pool = await LLMPoolService.get_instance()
-    if not pool.loaded:
-        await pool.load_from_db(db)
-    
-    return {"logs": pool.get_call_logs(limit)}
-
-
-@router.get("/llm-pool/groups")
-async def get_llm_groups(
-    db: AsyncSession = Depends(get_db),
-    _: bool = Depends(verify_admin)
-):
-    """获取所有分组"""
-    pool = await LLMPoolService.get_instance()
-    if not pool.loaded:
-        await pool.load_from_db(db)
-    
-    return {"groups": pool.get_groups()}
 
 
 @router.get("/llm-pool/{index}/stats")
