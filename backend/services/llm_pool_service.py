@@ -180,8 +180,12 @@ class LLMPoolService:
     
     def _increment_request_count(self, model: Dict):
         """增加模型的请求计数（通过匹配base_url和model来找到池中对应的模型）"""
+        model_base_url = str(model.get("base_url", "")).rstrip("/")
+        model_name = model.get("model", "")
+        
         for m in self._pool:
-            if m.get("base_url") == model.get("base_url") and m.get("model") == model.get("model"):
+            pool_base_url = str(m.get("base_url", "")).rstrip("/")
+            if pool_base_url == model_base_url and m.get("model") == model_name:
                 if "request_count" not in m:
                     m["request_count"] = 0
                 m["request_count"] += 1
@@ -190,8 +194,13 @@ class LLMPoolService:
     
     def record_call_result(self, model: Dict, success: bool, response_time_ms: float, error: str = None):
         """记录调用结果（成功率、响应时间）"""
+        # 规范化URL比较（去掉尾部斜杠）
+        model_base_url = str(model.get("base_url", "")).rstrip("/")
+        model_name = model.get("model", "")
+        
         for m in self._pool:
-            if m.get("base_url") == model.get("base_url") and m.get("model") == model.get("model"):
+            pool_base_url = str(m.get("base_url", "")).rstrip("/")
+            if pool_base_url == model_base_url and m.get("model") == model_name:
                 # 更新成功/失败计数
                 if success:
                     m["success_count"] = m.get("success_count", 0) + 1
