@@ -48,6 +48,14 @@ async def init_db():
             )
         except:
             pass
+        try:
+            await conn.execute(
+                __import__('sqlalchemy').text(
+                    "ALTER TABLE bot_config ADD COLUMN respond_to_bot BOOLEAN DEFAULT 0"
+                )
+            )
+        except:
+            pass
 
 
 async def get_db():
