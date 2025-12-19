@@ -1,10 +1,10 @@
-from .models import Base, User, Memory, KnowledgeBase, Blacklist, ChannelWhitelist, Conversation, BotConfig, SystemConfig, SensitiveWord, PublicAPIConfig, PublicAPIUser, Lottery, LotteryParticipant, RedPacket, RedPacketClaim
+from .models import Base, User, Memory, KnowledgeBase, Blacklist, ChannelWhitelist, Conversation, BotConfig, SystemConfig, SensitiveWord, PublicAPIConfig, PublicAPIUser, Lottery, LotteryParticipant, RedPacket, RedPacketClaim, RedeemCode
 from .database import get_db, init_db, AsyncSessionLocal
 
 __all__ = [
     "Base", "User", "Memory", "KnowledgeBase", "Blacklist", 
     "ChannelWhitelist", "Conversation", "BotConfig", "SystemConfig",
     "SensitiveWord", "PublicAPIConfig", "PublicAPIUser",
-    "Lottery", "LotteryParticipant", "RedPacket", "RedPacketClaim",
+    "Lottery", "LotteryParticipant", "RedPacket", "RedPacketClaim", "RedeemCode",
     "get_db", "init_db", "AsyncSessionLocal"
 ]
