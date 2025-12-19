@@ -1088,7 +1088,7 @@ class PublicAPICommands(commands.Cog):
                     "winner_count": winners,
                     "created_by": str(interaction.user.id)
                 },
-                headers={"X-Admin-Secret": os.getenv("ADMIN_PASSWORD", "")}
+                headers={"X-Admin-Secret": ADMIN_PASSWORD}
             )
             data = resp.json()
             
@@ -1139,7 +1139,7 @@ class PublicAPICommands(commands.Cog):
                     "is_random": random,
                     "created_by": str(interaction.user.id)
                 },
-                headers={"X-Admin-Secret": os.getenv("ADMIN_PASSWORD", "")}
+                headers={"X-Admin-Secret": ADMIN_PASSWORD}
             )
             data = resp.json()
             
@@ -1174,7 +1174,7 @@ class PublicAPICommands(commands.Cog):
         try:
             resp = await self.bot.http_client.post(
                 f"{BACKEND_URL}/api/public/lottery/{lottery_id}/draw",
-                headers={"X-Admin-Secret": os.getenv("ADMIN_PASSWORD", "")}
+                headers={"X-Admin-Secret": ADMIN_PASSWORD}
             )
             data = resp.json()
             
@@ -1285,3 +1285,4 @@ class RedPacketView(discord.ui.View):
                 await interaction.followup.send(f"❌ {data.get('error', '领取失败')}", ephemeral=True)
         except Exception as e:
             await interaction.followup.send(f"❌ 领取失败: {e}", ephemeral=True)
+

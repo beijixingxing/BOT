@@ -971,17 +971,18 @@
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1"
-                    >默认额度</label
+                    >默认金额 ($)</label
                   >
                   <input
                     type="number"
                     id="publicApiQuota"
-                    placeholder="100000"
-                    value="100000"
+                    placeholder="0.2"
+                    value="0.2"
+                    step="0.01"
                     class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                   <p class="text-xs text-gray-500 mt-1">
-                    NewAPI额度单位 (1美元=500000)
+                    自动换算为额度 (1美元 = 500000 额度)
                   </p>
                 </div>
                 <div>
@@ -1262,13 +1263,14 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
-              >奖品额度 (NewAPI单位)</label
+              >奖品金额 ($)</label
             >
             <input
               type="number"
               id="lotteryPrize"
-              placeholder="100000"
-              value="100000"
+              placeholder="0.2"
+              value="0.2"
+              step="0.01"
               class="w-full px-4 py-2 border rounded-lg"
             />
           </div>
@@ -1325,16 +1327,17 @@
         <div class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
-              >总额度 (NewAPI单位)</label
+              >总金额 ($)</label
             >
             <input
               type="number"
               id="rpTotalQuota"
-              placeholder="500000"
-              value="500000"
+              placeholder="1"
+              value="1"
+              step="0.01"
               class="w-full px-4 py-2 border rounded-lg"
             />
-            <p class="text-xs text-gray-500 mt-1">1美元 = 500000</p>
+            <p class="text-xs text-gray-500 mt-1">1美元 = 500000 额度</p>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
@@ -1403,13 +1406,14 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
-              >额度 (可选，用于记录)</label
+              >金额 ($)</label
             >
             <input
               type="number"
               id="redeemCodeQuota"
-              placeholder="500000"
-              value="500000"
+              placeholder="1"
+              value="1"
+              step="0.01"
               class="w-full px-4 py-2 border rounded-lg"
             />
           </div>
@@ -3201,10 +3205,11 @@
                     bc.is_active ? "启用" : "禁用"
                   }</div>
                 </div>
-                <div class="mt-3 text-sm text-gray-600 truncate">
-                  <span class="text-gray-500">人设：</span>${(
-                    bc.system_prompt || ""
-                  ).substring(0, 100)}...
+                <div class="mt-3 text-sm text-gray-600">
+                  <span class="text-gray-500">人设：</span>
+                  <div class="mt-1 max-h-32 overflow-y-auto bg-gray-50 p-2 rounded text-xs break-words whitespace-pre-wrap border border-gray-100">
+                    ${bc.system_prompt || "无"}
+                  </div>
                 </div>
               </div>
             `
@@ -3875,7 +3880,7 @@
             document.getElementById("publicApiUrl").value =
               data.newapi_url || "";
             document.getElementById("publicApiQuota").value =
-              data.default_quota || 100000;
+              (data.default_quota || 100000) / 500000;
             document.getElementById("publicApiGroup").value =
               data.default_group || "default";
           }
@@ -3891,7 +3896,7 @@
       // ========== 抽奖管理 ==========
       function showLotteryModal() {
         document.getElementById("lotteryTitle").value = "";
-        document.getElementById("lotteryPrize").value = "100000";
+        document.getElementById("lotteryPrize").value = "0.2";
         document.getElementById("lotteryWinnerCount").value = "1";
         document.getElementById("lotteryDesc").value = "";
         document.getElementById("lotteryModal").classList.remove("hidden");
@@ -3957,7 +3962,7 @@
             bot_id: getPublicApiBotId(),
             title: title,
             prize_quota:
-              parseInt(document.getElementById("lotteryPrize").value) || 100000,
+              Math.round((parseFloat(document.getElementById("lotteryPrize").value) || 0.2) * 500000),
             winner_count:
               parseInt(document.getElementById("lotteryWinnerCount").value) ||
               1,
@@ -4003,7 +4008,7 @@
 
       // ========== 红包管理 ==========
       function showRedPacketModal() {
-        document.getElementById("rpTotalQuota").value = "500000";
+        document.getElementById("rpTotalQuota").value = "1";
         document.getElementById("rpTotalCount").value = "10";
         document.getElementById("rpIsRandom").checked = true;
         document.getElementById("redPacketModal").classList.remove("hidden");
@@ -4060,7 +4065,7 @@
           await api("/api/public/redpacket", "POST", {
             bot_id: getPublicApiBotId(),
             total_quota:
-              parseInt(document.getElementById("rpTotalQuota").value) || 500000,
+              Math.round((parseFloat(document.getElementById("rpTotalQuota").value) || 1) * 500000),
             total_count:
               parseInt(document.getElementById("rpTotalCount").value) || 10,
             is_random: document.getElementById("rpIsRandom").checked,
@@ -4100,8 +4105,7 @@
             newapi_url: url,
             newapi_token: token,
             default_quota:
-              parseInt(document.getElementById("publicApiQuota").value) ||
-              100000,
+              Math.round((parseFloat(document.getElementById("publicApiQuota").value) || 0.2) * 500000),
             default_group:
               document.getElementById("publicApiGroup").value || "default",
           });
@@ -4140,7 +4144,7 @@
       // ========== 兑换码管理 ==========
       function showRedeemCodeModal() {
         document.getElementById("redeemCodes").value = "";
-        document.getElementById("redeemCodeQuota").value = "500000";
+        document.getElementById("redeemCodeQuota").value = "1";
         document.getElementById("redeemCodeDesc").value = "";
         document.getElementById("redeemCodeModal").classList.remove("hidden");
       }
@@ -4227,7 +4231,7 @@
             bot_id: getPublicApiBotId(),
             codes: codes,
             quota:
-              parseInt(document.getElementById("redeemCodeQuota").value) || 0,
+              Math.round((parseFloat(document.getElementById("redeemCodeQuota").value) || 0) * 500000),
             description: document.getElementById("redeemCodeDesc").value.trim(),
           });
           showToast(`已添加 ${result.added} 个兑换码`, "success");
